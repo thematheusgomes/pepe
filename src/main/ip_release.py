@@ -5,9 +5,9 @@ from main.util import validate_json_with_schema, allow_ip_on_waf
 def handler(event, context):
 
     if validate_json_with_schema(event):
-        changed_wafs = allow_ip_on_waf(event)    
+        changed_wafs = allow_ip_on_waf(event)['message']    
         body = {
-            "message": changed_wafs['message'],
+            "message": changed_wafs,
             "input": event
         }
 
