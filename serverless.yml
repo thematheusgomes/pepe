@@ -1,0 +1,28 @@
+service: pepe
+
+provider:
+  name: aws
+  runtime: python3.6
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+functions:
+  ip-release-manager:
+    handler: src/main/ip_release_manager.handler
+    environment:
+      ip_sets: waf.json
+    events:
+      - http:
+          path: /ip
+          method: POST
+          parameters:
+            headers:
+              Accept: 'application/json'
+              Content-Type: 'application/json'

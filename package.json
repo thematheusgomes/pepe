@@ -1,0 +1,15 @@
+{
+  "name": "pepe",
+  "version": "1.0.0",
+  "description": "### Clone Repository",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serverless": "^1.55.1",
+    "serverless-python-requirements": "^5.0.0"
+  }
+}
