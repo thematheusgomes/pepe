@@ -6,13 +6,13 @@ provider:
   region: us-east-1
   stage: ${opt:stage, 'dev'}
 
-plugins:
-  - serverless-python-requirements
-
-custom:
-  pythonRequirements:
-    dockerizePip: non-linux
-
+package:
+  include:
+    - src/main/*
+  exclude:
+    - ./**
+    - src/test/**
+    
 functions:
   ip-release-manager:
     handler: src/main/ip_release_manager.handler
