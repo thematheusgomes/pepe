@@ -10,12 +10,13 @@ package:
   artifact: ./pepe.zip
 
 functions:
-  ip-release:
+  pepe:
     role: arn:aws:iam::212568053769:role/role-lambda-pepe-ip-release
-    handler: lambda.ip_handler
+    handler: lambda.handler
     environment:
       ip_sets: waf.json
       BOT_TOKEN: xoxb-293645508629-815265783972-kiECvHVP9Yv3leaGbo7gaokA
+      SLACK_URL: https://slack.com/api/chat.postMessage
     events:
       - http:
           path: /ip
