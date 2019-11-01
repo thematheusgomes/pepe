@@ -7,17 +7,15 @@ provider:
   stage: ${opt:stage, 'dev'}
 
 package:
-  include:
-    - src/main/*
-  exclude:
-    - ./**
-    - src/test/**
-    
+  artifact: ./pepe.zip
+
 functions:
-  ip-release-manager:
-    handler: src/main/ip_release_manager.handler
+  ip-release:
+    role: arn:aws:iam::212568053769:role/role-lambda-pepe-ip-release
+    handler: lambda.ip_handler
     environment:
       ip_sets: waf.json
+      BOT_TOKEN: xoxb-293645508629-815265783972-kiECvHVP9Yv3leaGbo7gaokA
     events:
       - http:
           path: /ip

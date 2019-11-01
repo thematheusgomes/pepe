@@ -23,7 +23,7 @@ source scripts.sh
 IP should be on CIDR notation. Example event:
 ```
     {
-        "action": "allow",
+        "action": "waf",
         "location": ( "mx" || "br" || "us" || "song" || "mariano" || "john" || "andres" ),
         "ip": "0.0.0.0/32" 
     }
@@ -38,3 +38,6 @@ WAF Regional:
 
 `aws waf-regional list-ip-sets --query "IPSets[*]" --region us-east-1 | jq '.[] | "\(.Name) \(.IPSetId)"'`
 
+## TODO
+
+replace jsonschema with fastjsonschema

@@ -45,7 +45,45 @@ function aws-check() {
 function py-install() {
     py-env
     echo "[production] py-install..."
-    pip install -r dependecies/requirements.txt
+    pip install --target ./build -r ./dependencies/requirements.txt --no-cache-dir
+}
+
+function py-install-dev() {
+    py-env
+    echo "[development] py-install..."
+    pip install -q -r ./dependencies/requirements.dev.txt --no-cache-dir
     npm install
 }
 
+function lambda-permissions() {
+    cd $1
+    chmod 755 $(find $(pwd) -type d)
+    chmod 644 $(find $(pwd) -type f)
+    cd ..
+}
+
+function py-zip() {
+    py-d-env
+    py-env
+    cp -R ./waf.json ./build
+    cp -R ./src/lambda.py ./build/
+    cp -R ./src/main ./build
+    lambda-permissions ./build
+    cd ./build
+    zip -q -rMM9 $PROJECT.zip .
+    mv $PROJECT.zip ../
+    cd ..
+    py-d-env
+}
+
+function py-build() {
+    py-d-env
+    py-env
+    rm -rf $ENVPATH/ ./build/ $(find ./src/ -name __pycache__) $PROJECT.zip
+    mkdir ./build
+    py-install
+    py-zip
+    py-d-env
+    rm -rf $ENVPATH/ $(find ./src/ -name __pycache__)
+    py-install-dev
+}
