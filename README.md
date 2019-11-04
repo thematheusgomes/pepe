@@ -16,28 +16,25 @@ cd pepe/
 source scripts.sh
 ```
 
-# Tasks
+# Available Commands
 
-## WAF IP release
+## help
 
-IP should be on CIDR notation. Example event:
-```
-    {
-        "action": "waf",
-        "location": ( "mx" || "br" || "us" || "song" || "mariano" || "john" || "andres" ),
-        "ip": "0.0.0.0/32" 
-    }
+Provides helpful information of available commands and how to interact with pepe.
 
-```
+*Syntax*: `help` or `help command`
+## waf
 
-WAF Global: 
+Release IP address on given WAF location.
+
+*Syntax*: `waf <location> <CIDR>`
+
+*Tips*
+
+- WAF Global: 
 
 `aws waf list-ip-sets --query "IPSets[*]" | jq '.[] | "\(.Name) \(.IPSetId)"'`
 
-WAF Regional: 
+- WAF Regional: 
 
 `aws waf-regional list-ip-sets --query "IPSets[*]" --region us-east-1 | jq '.[] | "\(.Name) \(.IPSetId)"'`
-
-## TODO
-
-replace jsonschema with fastjsonschema

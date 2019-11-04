@@ -31,9 +31,6 @@ def help_handler (arguments):
     else:
         return 'Sorry, I did not get that, please type help or help <command>.'
 
-    
-    #return {'action': 'help', 'message': 'TODO implement help for commands'}
-
 def ip_release(arguments):
     """
     *Action:* waf
