@@ -1,0 +1,43 @@
+{
+    "type": "MESSAGE",
+    "eventTime": "2020-12-05T01:02:09.429967Z",
+    "message": {
+        "name": "spaces/<space_id>/messages/<thread_id>.<thread_id>",
+        "sender": {
+            "name": "users/<user_id>",
+            "displayName": "Matheus Gomes",
+            "avatarUrl": "https://lh3.googleusercontent.com/a-/<image_hash>",
+            "email": "user.email@gmail.com",
+            "type": "HUMAN",
+            "domainId": "<domain_id>"
+        },
+        "createTime": "2020-12-05T01:02:09.429967Z",
+        "text": "some message",
+        "thread": {
+            "name": "spaces/<space_id>/threads/<thread_id>",
+            "retentionSettings": {
+                "state": "PERMANENT"
+            }
+        },
+        "space": {
+            "name": "spaces/<space_id>",
+            "type": "DM",
+            "singleUserBotDm": true
+        },
+        "argumentText": "some message"
+    },
+    "user": {
+        "name": "users/<user_id>",
+        "displayName": "Matheus Gomes",
+        "avatarUrl": "https://lh3.googleusercontent.com/a-/<image_hash>",
+        "email": "user.email@gmail.com",
+        "type": "HUMAN",
+        "domainId": "<domain_id>"
+    },
+    "space": {
+        "name": "spaces/<space_id>",
+        "type": "DM",
+        "singleUserBotDm": true
+    },
+    "configCompleteRedirectUrl": "https://chat.google.com/api/bot_config_complete?token=<token_id>"
+}

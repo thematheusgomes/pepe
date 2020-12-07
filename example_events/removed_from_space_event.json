@@ -1,0 +1,18 @@
+{
+    "type": "REMOVED_FROM_SPACE",
+    "eventTime": "2020-12-05T01:04:43.726425Z",
+    "user": {
+        "name": "users/<user_id>",
+        "displayName": "User Name",
+        "avatarUrl": "https://lh3.googleusercontent.com/a-/<image_hash>",
+        "email": "user.email@gmail.com",
+        "type": "HUMAN",
+        "domainId": "<domain_id>"
+    },
+    "space": {
+        "name": "spaces/<space_id>",
+        "type": "ROOM",
+        "displayName": "group-name",
+        "threaded": true
+    }
+}
