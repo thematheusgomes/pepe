@@ -8,7 +8,7 @@ function py-env() {
     echo "py-env..."
     if [ ! -d "$ENVPATH" ]; then
         echo "creating virtualenv..."
-        virtualenv -p python3.6 $ENVPATH
+        virtualenv -p python3 $ENVPATH
     fi
     if [ "$VLOCK" = "1"  ]; then
         echo "VLOCK is set! ignoring export PYTHONPATH and source $ENVPATH/bin/activate"
@@ -45,13 +45,13 @@ function aws-check() {
 function py-install() {
     py-env
     echo "[production] py-install..."
-    pip install --target ./build -r ./dependencies/requirements.txt --no-cache-dir
+    pip3 install --target ./build -r ./requirements.txt --no-cache-dir
 }
 
 function py-install-dev() {
     py-env
     echo "[development] py-install..."
-    pip install -q -r ./dependencies/requirements.dev.txt --no-cache-dir
+    pip3 install -q -r ./requirements.dev.txt --no-cache-dir
     npm install
 }
 
