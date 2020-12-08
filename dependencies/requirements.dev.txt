@@ -1,9 +1,0 @@
-boto3
-jsonschema
-pep8
-pylint
-pytest
-pytest-cov
-mock
-pytest-watch
-watchdog
