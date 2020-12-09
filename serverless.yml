@@ -28,5 +28,5 @@ functions:
   pepe:
     handler: wsgi.handler
     events:
-      - http: ANY /
-      - http: 'ANY {proxy+}'
+      - http: POST /
+      - http: 'POST {proxy+}'
