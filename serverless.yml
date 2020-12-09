@@ -18,8 +18,9 @@ provider:
   stage: prod
   region: us-east-1
   environment:
-    GLOBAL_IPSET: 8be5af6e-3f1f-4a57-a8bf-2bcacdb06a5a
-    REGIONAL_IPSET: 452b9455-9696-42cd-95a5-c77b5ff4fead
+    GLOBAL_IPSET: ${env:GLOBAL_IPSET}
+    REGIONAL_IPSET: ${env:REGIONAL_IPSET}
+    AUDIENCE: ${env:AUDIENCE}
   stackTags:
     environment: tools
     duration: temporary
@@ -28,5 +29,5 @@ functions:
   pepe:
     handler: wsgi.handler
     events:
-      - http: ANY /
-      - http: 'ANY {proxy+}'
+      - http: POST /
+      - http: 'POST {proxy+}'
