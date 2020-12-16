@@ -18,8 +18,10 @@ provider:
   stage: prod
   region: us-east-1
   environment:
-    GLOBAL_IPSET: ${env:GLOBAL_IPSET}
-    REGIONAL_IPSET: ${env:REGIONAL_IPSET}
+    GLOBAL_IPSET_DYNAMIC: ${env:GLOBAL_IPSET_DYNAMIC}
+    GLOBAL_IPSET_FIXED: ${env:GLOBAL_IPSET_FIXED}
+    REGIONAL_IPSET_DYNAMIC: ${env:REGIONAL_IPSET_DYNAMIC}
+    REGIONAL_IPSET_FIXED: ${env:REGIONAL_IPSET_FIXED}
     AUDIENCE: ${env:AUDIENCE}
   stackTags:
     environment: tools
