@@ -28,7 +28,6 @@ def on_event():
     else:
         text = 'Invalid event type'
         LOGGER.error(text)
-        LOGGER.error(f'Event: {event}')
         return response(text)
     return response(text)
 
