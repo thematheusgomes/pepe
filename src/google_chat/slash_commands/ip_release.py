@@ -2,12 +2,13 @@ import os
 import re
 import json
 from datetime import datetime
-
-import aws_waf.update_ipset as waf
+from aws_waf.update_ipset import update_ipset_handler
+from aws_waf.clean_ipset import clean_ipset_handler
 from google_chat.admin_auth import admin_authorization
 from log import Logger
 
 LOGGER = Logger()
+
 GLOBAL_IPSET_DYNAMIC = os.getenv('GLOBAL_IPSET_DYNAMIC')
 GLOBAL_IPSET_FIXED = os.getenv('GLOBAL_IPSET_FIXED')
 REGIONAL_IPSET_DYNAMIC = os.getenv('REGIONAL_IPSET_DYNAMIC')
