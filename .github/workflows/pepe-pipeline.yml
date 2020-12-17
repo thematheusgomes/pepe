@@ -9,7 +9,7 @@ jobs:
       GLOBAL_IPSET: ${secrets:GLOBAL_IPSET}
       REGIONAL_IPSET: ${secrets:REGIONAL_IPSET}
       AUDIENCE: ${secrets:AUDIENCE}
-      STAGE: dev
+      STAGE: prod
     steps:
       - name: Checkout
         uses: actions/checkout@v2

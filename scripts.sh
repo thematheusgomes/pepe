@@ -42,16 +42,22 @@ function aws-check() {
     fi
 }
 
+function py-update-pip() {
+    pip install --upgrade pip
+}
+
 function py-install() {
     py-env
+    py-update-pip
     echo "[production] py-install..."
-    pip3 install --target ./build -r ./requirements.txt --no-cache-dir
+    pip3 install -r ./requirements.txt
 }
 
 function py-install-dev() {
     py-env
+    py-update-pip
     echo "[development] py-install..."
-    pip3 install -q -r ./requirements.dev.txt --no-cache-dir
+    pip3 install -r ./requirements.dev.txt
     npm install
 }
 
