@@ -21,25 +21,34 @@ def ip_release_handler(args, user_name, user_email):
         return dynamic_ip_handler(args[1], user_name, user_email)
     elif args[0] == 'fixed' and validate_ip(args[1]):
         return fixed_ip_handler(args[1], user_name, user_email)
+    elif args[0] == 'clean':
+        return clean_ips(user_name, user_email)
     else:
         text = 'Invalid arguments\n\nThis command will accept only the following arguments:\n\n> /iprelease {publicIp}\n> /iprelease dynamic {publicIp}\n> /iprelease fixed {publicIp}'
         LOGGER.error(f'Invalid arguments: {args}')
         return text
 
 def dynamic_ip_handler(publicIp, user_name, user_email):
-    text = waf.allow_ip_on_global_ipset(GLOBAL_IPSET_DYNAMIC, publicIp, user_name)
-    text = waf.allow_ip_on_regional_ipset(REGIONAL_IPSET_DYNAMIC, publicIp, user_name)
+    publicIp = [publicIp+'/32']
+    text = update_ipset_handler(GLOBAL_IPSET_DYNAMIC, REGIONAL_IPSET_DYNAMIC, publicIp, user_name, action = 'INSERT')
     print(data_log(publicIp, user_name, user_email, type = 'dynamic'))
     return text
 
 def fixed_ip_handler(publicIp, user_name, user_email):
     if admin_authorization(user_name, user_email):
-        text = waf.allow_ip_on_global_ipset(GLOBAL_IPSET_FIXED, publicIp, user_name)
-        text = waf.allow_ip_on_regional_ipset(REGIONAL_IPSET_FIXED, publicIp, user_name)
+        publicIp = [publicIp+'/32']
+        text = update_ipset_handler(GLOBAL_IPSET_FIXED, REGIONAL_IPSET_DYNAMIC, publicIp, user_name, action = 'INSERT')
         print(data_log(publicIp, user_name, user_email, type = 'fixed'))
         return text
     else:
         return f'{user_name}, you are not authorized to execute this command, please contact your administrators'
+
+def clean_ips(user_name, user_email):
+    if admin_authorization(user_name, user_email):
+        global_ips, regional_ips = clean_ipset_handler(GLOBAL_IPSET_DYNAMIC, REGIONAL_IPSET_DYNAMIC, user_name)
+        print(data_log(global_ips, user_name, user_email, type = 'clean-global'))
+        print(data_log(regional_ips, user_name, user_email, type = 'clean-regional'))
+        return f"Dynamic ips have been cleaned"
 
 def data_log(publicIp, user_name, user_email, type):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -47,7 +56,7 @@ def data_log(publicIp, user_name, user_email, type):
         "user_name": f"{user_name}",
         "email": f"{user_email}",
         "type": f"{type}",
-        "publicIp": f"{publicIp}",
+        "publicIp": publicIp,
         "timestamp": f"{timestamp}"
     })
 
