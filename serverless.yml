@@ -5,6 +5,11 @@ plugins:
   - serverless-wsgi
   - serverless-plugin-resource-tagging
 
+package:
+  exclude:
+    - ./**
+    - '!src/**'
+
 custom:
   wsgi:
     app: src/app.app
@@ -27,7 +32,7 @@ provider:
     AUDIENCE: ${env:AUDIENCE}
   stackTags:
     environment: tools
-    duration: temporary
+    duration: indeterminate
 
 functions:
   pepe:
