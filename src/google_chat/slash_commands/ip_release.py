@@ -1,7 +1,7 @@
 import os
-import re
 import json
 from datetime import datetime
+from ipaddress import ip_address
 from aws_waf.update_ipset import update_ipset_handler
 from aws_waf.clean_ipset import clean_ipset_handler
 from google_chat.admin_auth import admin_authorization
@@ -61,15 +61,14 @@ def data_log(publicIp, user_name, user_email, type):
     })
 
 def validate_ip(publicIp):
-    # for validating an Ip-address 
-    regex = '''^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.( 
-            25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.( 
-            25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.( 
-            25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$'''
-    # pass the regular expression 
-    # and the string in search() method 
-    if(re.search(regex, publicIp)):
-        LOGGER.info(f'Valid Ip address: {publicIp}')
-        return True
-    else:
+    try:
+        ip_address(publicIp)
+        if ip_address(publicIp).is_private:
+            LOGGER.error(f'The IP {publicIp} is private, the ip address must be public')
+            return False
+        else:
+            LOGGER.info(f'Public IP address: {publicIp}')
+            return True
+    except Exception as e:
+        LOGGER.error(e)
         return False
