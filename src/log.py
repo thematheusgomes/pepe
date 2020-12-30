@@ -3,6 +3,18 @@
 '''
 import logging
 import sys
+import json
+from datetime import datetime
+
+def data_log(publicIp, user_name, user_email, type):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return json.dumps({
+        "user_name": f"{user_name}",
+        "email": f"{user_email}",
+        "type": f"{type}",
+        "publicIp": publicIp,
+        "timestamp": f"{timestamp}"
+    })
 
 def _build():
     ''' Creates a logger instance '''
