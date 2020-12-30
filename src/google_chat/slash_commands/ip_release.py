@@ -14,14 +14,16 @@ REGIONAL_IPSET_DYNAMIC = os.getenv('REGIONAL_IPSET_DYNAMIC')
 REGIONAL_IPSET_FIXED = os.getenv('REGIONAL_IPSET_FIXED')
 
 def ip_release_handler(args, user_name, user_email):
-    if validate_ip(args[0]):
-        return dynamic_ip_handler(args[0], user_name, user_email)
-    elif args[0] == 'dynamic' and validate_ip(args[1]):            
+    if args[0] == 'dynamic' and validate_ip(args[1]):
         return dynamic_ip_handler(args[1], user_name, user_email)
     elif args[0] == 'fixed' and validate_ip(args[1]):
         return fixed_ip_handler(args[1], user_name, user_email)
     elif args[0] == 'clean':
         return clean_ips(user_name, user_email)
+    elif args[0] == 'dev' or args[0] == 'qa' or args[0] == 'prod' or args[0] == 'tools' and validate_ip(args[1]):
+        return security_group_handler(args[0], args[1], user_name, user_email)
+    elif validate_ip(args[0]):
+        return dynamic_ip_handler(args[0], user_name, user_email)
     else:
         text = 'Invalid arguments\n\nThis command will accept only the following arguments:\n\n> /iprelease {publicIp}\n> /iprelease dynamic {publicIp}\n> /iprelease fixed {publicIp}'
         LOGGER.error(f'Invalid arguments: {args}')
