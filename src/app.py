@@ -4,7 +4,7 @@ import json
 from flask import Flask, request
 from log import Logger
 from google_chat.slash_commands.commands_handler import slash_command_handler
-from google_chat.auth import authorization
+from google_chat.bot_authorization import authorization
 
 LOGGER = Logger()
 app = Flask(__name__)
