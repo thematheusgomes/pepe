@@ -62,12 +62,11 @@ def data_log(publicIp, user_name, user_email, type):
 
 def validate_ip(publicIp):
     try:
-        ip_address(publicIp)
         if ip_address(publicIp).is_private:
-            LOGGER.error(f'The IP {publicIp} is private, the ip address must be public')
+            LOGGER.error(f'Invalid IP address: {publicIp}, ip address must be public and not private')
             return False
         else:
-            LOGGER.info(f'Public IP address: {publicIp}')
+            LOGGER.info(f'Valid IP address: {publicIp}')
             return True
     except Exception as e:
         LOGGER.error(e)
