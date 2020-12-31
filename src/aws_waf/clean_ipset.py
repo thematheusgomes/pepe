@@ -4,7 +4,7 @@ import aws_waf.update_ipset as waf
 
 LOGGER = Logger()
 
-def clean_ipset_handler(global_ipset, regional_ipset, user_name):
+def clean_ipset(global_ipset, regional_ipset, user_name):
     global_ips = get_global_ipset(global_ipset, publicIps = [])
     regional_ips = get_regional_ipset(regional_ipset, publicIps = [])
     global_params = waf.constructor(global_ips, action = 'DELETE')
