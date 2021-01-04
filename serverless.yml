@@ -25,6 +25,11 @@ provider:
   memorySize: 128
   timemout: 15
   environment:
+    USERS: ${env:USERS}
+    DEV_SGID: ${env:DEV_SGID}
+    QA_SGID: ${env:QA_SGID}
+    PROD_SGID: ${env:PROD_SGID}
+    TOOLS_SGID: ${env:TOOLS_SGID}
     GLOBAL_IPSET_DYNAMIC: ${env:GLOBAL_IPSET_DYNAMIC}
     GLOBAL_IPSET_FIXED: ${env:GLOBAL_IPSET_FIXED}
     REGIONAL_IPSET_DYNAMIC: ${env:REGIONAL_IPSET_DYNAMIC}
