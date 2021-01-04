@@ -25,6 +25,7 @@ provider:
   memorySize: 128
   timemout: 15
   environment:
+    USERS: ${env:USERS}
     DEV_SGID: ${env:DEV_SGID}
     QA_SGID: ${env:QA_SGID}
     PROD_SGID: ${env:PROD_SGID}

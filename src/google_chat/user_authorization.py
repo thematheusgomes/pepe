@@ -1,35 +1,9 @@
+import os
 import json
 from log import Logger
 
 LOGGER = Logger()
-USERS = {
-    "users": {
-        "admin": [
-            {
-                "name": "Matheus Gomes",
-                "email": "matheus.gomes@boomcredit.net"
-            },
-            {
-                "name": "Song Kim",
-                "email": "song@boomcredit.net"
-            },
-            {
-                "name": "Joaquim Silveira",
-                "email": "joaquim.silveira@boomcredit.net"
-            }
-        ],
-        "dev": [
-            {
-                "name": "Murilo Veiga",
-                "email": "murilo.veiga@boomcredit.net"
-            },
-            {
-                "name": "Jose Luis Trinidad del Real",
-                "email": "jose.real@boomcredit.net"
-            }
-        ]
-    }
-}
+USERS = json.loads(os.getenv('USERS'))
 
 def user_authorization(user_name, user_email, type):
     for user in USERS['users'][type]:
