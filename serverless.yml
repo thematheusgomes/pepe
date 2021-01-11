@@ -2,7 +2,7 @@ service: pepe
 
 plugins:
   - serverless-python-requirements
-  - serverless-wsgi
+  - serverless-offline
   - serverless-plugin-resource-tagging
 
 package:
@@ -11,19 +11,17 @@ package:
     - '!src/**'
 
 custom:
-  wsgi:
-    app: src/app.app
-    packRequirements: false
   pythonRequirements:
     dockerizePip: non-linux
 
 provider:
   name: aws
   runtime: python3.8
-  stage: prod
+  stage: dev
   region: us-east-1
   memorySize: 128
   timemout: 15
+  role: arn:aws:iam::212568053769:role/role-lambda-pepe
   environment:
     USERS: ${env:USERS}
     DEV_SGID: ${env:DEV_SGID}
@@ -38,10 +36,13 @@ provider:
   stackTags:
     environment: tools
     duration: indeterminate
+  apiGateway:
+    shouldStartNameWithService: true
 
 functions:
   pepe:
-    handler: wsgi.handler
+    handler: src/app.handler
     events:
-      - http: POST /
-      - http: 'POST {proxy+}'
+      - http:
+          path: /
+          method: POST
