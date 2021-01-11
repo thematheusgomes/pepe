@@ -25,7 +25,6 @@ def ip_release_handler(args, user_name, user_email):
         return clean_ips(user_name, user_email)
     else:
         text = 'Invalid arguments\n\nThis command will accept only the following arguments:\n\n> /iprelease {publicIp}\n> /iprelease dynamic {publicIp}\n> /iprelease fixed {publicIp}'
-        LOGGER.error(f'Invalid arguments: {args}')
         return text
 
 def dynamic_ip_handler(publicIp, user_name, user_email):
