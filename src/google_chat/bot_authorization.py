@@ -1,7 +1,7 @@
 import os
 import sys
 from oauth2client import client
-from log import Logger
+from src.log import Logger
 
 LOGGER = Logger()
 

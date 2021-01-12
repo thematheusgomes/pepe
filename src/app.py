@@ -1,7 +1,7 @@
 import json
-from log import Logger
-from google_chat.slash_commands.commands_handler import select_command
-from google_chat.bot_authorization import authorization
+from src.log import Logger
+from src.google_chat.slash_commands.commands_handler import select_command
+from src.google_chat.bot_authorization import authorization
 
 LOGGER = Logger()
 

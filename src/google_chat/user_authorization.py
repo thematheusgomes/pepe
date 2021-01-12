@@ -1,6 +1,6 @@
 import os
 import json
-from log import Logger
+from src.log import Logger
 
 LOGGER = Logger()
 USERS = json.loads(os.getenv('USERS'))

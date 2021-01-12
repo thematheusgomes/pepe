@@ -1,5 +1,5 @@
 import boto3
-from log import Logger
+from src.log import Logger
 
 LOGGER = Logger()
 

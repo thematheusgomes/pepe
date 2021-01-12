@@ -1,7 +1,7 @@
-import aws_waf.waf as waf
+import src.aws_waf.waf as waf
 from ipaddress import ip_address
-from aws_sg.security_group import security_group_handler
-from log import Logger
+from src.aws_sg.security_group import security_group_handler
+from src.log import Logger
 
 LOGGER = Logger()
 
