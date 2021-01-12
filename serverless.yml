@@ -1,8 +1,8 @@
 service: pepe
 
 plugins:
-  - serverless-python-requirements
   - serverless-offline
+  - serverless-python-requirements
   - serverless-plugin-resource-tagging
 
 package:
@@ -13,6 +13,8 @@ package:
 custom:
   pythonRequirements:
     dockerizePip: non-linux
+
+useDotenv: true
 
 provider:
   name: aws
@@ -38,10 +40,12 @@ provider:
     duration: indeterminate
   apiGateway:
     shouldStartNameWithService: true
+  lambdaHashingVersion: 20201221
 
 functions:
   pepe:
     handler: src/app.handler
+    name: ${self:provider.stage}-pepe-bot
     events:
       - http:
           path: /
