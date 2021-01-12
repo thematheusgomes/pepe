@@ -17,10 +17,14 @@ var/
 *.egg
 __pycache__
 
+# Environment files
+.env.development
+.env.production
+
 # Serverless directories
 .serverless
 
-# Virtualenv
+# Others
 .venv/
 .vscode/
 node_modules

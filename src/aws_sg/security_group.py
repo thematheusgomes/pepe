@@ -1,7 +1,7 @@
 import os
 import boto3
-from google_chat.user_authorization import user_authorization
-from log import Logger, data_log
+from src.google_chat.user_authorization import user_authorization
+from src.log import Logger, data_log
 
 LOGGER = Logger()
 

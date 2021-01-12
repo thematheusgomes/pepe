@@ -1,19 +1,14 @@
-# app.py
-
 import json
-from flask import Flask, request
-from log import Logger
-from google_chat.slash_commands.commands_handler import select_command
-from google_chat.bot_authorization import authorization
+from src.log import Logger
+from src.google_chat.slash_commands.commands_handler import select_command
+from src.google_chat.bot_authorization import authorization
 
 LOGGER = Logger()
-app = Flask(__name__)
 
-@app.route('/google-chat', methods=['POST'])
-def on_event():
+def handler(event, context):
     """Handles an event from Google Chat."""
-    event = request.get_json()
-    token = request.headers.get('Authorization').replace('Bearer ', '')
+    token = event['headers']['Authorization'].replace('Bearer ', '')
+    event = json.loads(event['body'])
     # Check the authenticity of the token sent
     authorization(token)
     user_email = event['user']['email']
@@ -34,4 +29,12 @@ def on_event():
     return response(text)
 
 def response(text):
-    return json.dumps({'text': text})
+    return ({
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": json.dumps({
+                "text": text
+            })
+        })

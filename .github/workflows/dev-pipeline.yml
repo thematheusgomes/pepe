@@ -1,0 +1,40 @@
+name: '[DEV] Pipeline'
+on:
+  push:
+    branches: [develop]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ENV_FILE: ${secrets:DEV_ENV}
+      STAGE: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.x'
+      - name: Install Serverless Packages
+        run: npm install
+      - name: Generates Env File
+        run: echo $ENV_FILE > .env
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - name: Deploy
+        run: npx serverless deploy --stage $STAGE
+      - name: Google Chat Notification
+        uses: Co-qn/google-chat-notification@releases/v1
+        if: always()
+        with:
+          name: '[DEV] Deploy'
+          url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+          status: ${{ job.status }}
