@@ -1,32 +1,28 @@
-name: "(Pepe) Pipeline"
+name: '[PROD] Pipeline'
 on:
   push:
-    branches: [develop]
+    tags: ['v[1-2][0-9].[0-1][0-9].[0-3][0-9]*']
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      GLOBAL_IPSET: ${secrets:GLOBAL_IPSET}
-      REGIONAL_IPSET: ${secrets:REGIONAL_IPSET}
-      AUDIENCE: ${secrets:AUDIENCE}
+      ENV_FILE: ${secrets:PROD_ENV}
       STAGE: prod
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: '14.x'
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
-      - name: Install Dependencies
-        run: |
-          source scripts.sh
-          py-install
+          python-version: '3.8.x'
       - name: Install Serverless Packages
         run: npm install
+      - name: Generates Env File
+        run: echo $ENV_FILE > .env
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -34,11 +30,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy
-        run: serverless deploy --stage $STAGE
+        run: npx serverless deploy --stage $STAGE
       - name: Google Chat Notification
         uses: Co-qn/google-chat-notification@releases/v1
         if: always()
         with:
-          name: Deploy
+          name: '[PROD] Deploy'
           url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
           status: ${{ job.status }}
