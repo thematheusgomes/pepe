@@ -47,5 +47,5 @@ functions:
     name: ${env:STAGE}-pepe-bot
     events:
       - http:
-          path: /
+          path: googlechat
           method: POST
