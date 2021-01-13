@@ -18,8 +18,9 @@ var/
 __pycache__
 
 # Environment files
-.env.development
-.env.production
+.env
+.env.dev
+.env.prod
 
 # Serverless directories
 .serverless
