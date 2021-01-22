@@ -1,0 +1,163 @@
+{
+    "body": {
+        "created_at": 1610720976,
+        "event": {
+            "id": "6001a55785a8fc6ab3c0ef7c",
+            "type": "event",
+            "created_at": 1610720601,
+            "kind": "degraded",
+            "eventable": {
+                "id": "6001a55685a8fc6ab3c0ef7b",
+                "type": "status",
+                "created_at": 1610720598,
+                "updated_at": 1610720958,
+                "watchdog": "60019bb710bdfb5de36caa8e",
+                "state": -1,
+                "duration": 356,
+                "began_at": 1610720598
+            },
+            "contexts": {
+                "component": {
+                    "id": "60019bb710bdfb5de36caa92",
+                    "type": "component",
+                    "created_at": 1610718135,
+                    "updated_at": 1610720678,
+                    "name": "Test - Webhook",
+                    "description": null,
+                    "description_html": "",
+                    "group": {
+                        "id": "5fbffa86386fb374416ee13b",
+                        "type": "group",
+                        "created_at": 1606417030,
+                        "updated_at": 1606417030,
+                        "name": "Tools",
+                        "description": null,
+                        "description_html": "",
+                        "components": [
+                            "60019bb710bdfb5de36caa92"
+                        ]
+                    },
+                    "percent_uptime": 99.9579387345679
+                }
+            }
+        },
+        "subscription": {
+            "id": "60019733f4e01e2b0378b94d",
+            "type": "subscription",
+            "created_at": 1610716979,
+            "updated_at": 1610716979,
+            "plugin": "webhook"
+        },
+        "status_page": {
+            "name": "BoomCredit"
+        },
+        "_embedded": {
+            "event": {
+                "_embedded": {
+                    "contexts": {
+                        "_embedded": {
+                            "component": {
+                                "_links": {
+                                    "self-view": {
+                                        "href": "https://status.boomcredit.net/components/60019bb710bdfb5de36caa92"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "subscription": {
+                "_links": {
+                    "update-form": {
+                        "href": "https://status.boomcredit.net/subscriptions/60019733f4e01e2b0378b94d/edit"
+                    }
+                }
+            },
+            "status_page": {
+                "_links": {
+                    "self-view": {
+                        "href": "https://status.boomcredit.net/"
+                    }
+                }
+            }
+        }
+    },
+    "headers": {
+        "Host": "d29d40466ea5.ngrok.io",
+        "User-Agent": "Faraday v0.17.3",
+        "Content-Length": "1309",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
+        "Content-Type": "application/json",
+        "X-Forwarded-For": "100.20.163.199",
+        "X-Forwarded-Proto": "https"
+    },
+    "httpMethod": "POST",
+    "isBase64Encoded": false,
+    "multiValueHeaders": {
+        "Host": [
+            "d29d40466ea5.ngrok.io"
+        ],
+        "User-Agent": [
+            "Faraday v0.17.3"
+        ],
+        "Content-Length": [
+            "1309"
+        ],
+        "Accept": [
+            "*/*"
+        ],
+        "Accept-Encoding": [
+            "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+        ],
+        "Content-Type": [
+            "application/json"
+        ],
+        "X-Forwarded-For": [
+            "100.20.163.199"
+        ],
+        "X-Forwarded-Proto": [
+            "https"
+        ]
+    },
+    "multiValueQueryStringParameters": null,
+    "path": "/hundio",
+    "pathParameters": null,
+    "queryStringParameters": null,
+    "requestContext": {
+        "accountId": "offlineContext_accountId",
+        "apiId": "offlineContext_apiId",
+        "authorizer": {
+            "principalId": "offlineContext_authorizer_principalId"
+        },
+        "domainName": "offlineContext_domainName",
+        "domainPrefix": "offlineContext_domainPrefix",
+        "extendedRequestId": "ckjydojh4000r2nnc9ql0hlei",
+        "httpMethod": "POST",
+        "identity": {
+            "accessKey": null,
+            "accountId": "offlineContext_accountId",
+            "apiKey": "offlineContext_apiKey",
+            "caller": "offlineContext_caller",
+            "cognitoAuthenticationProvider": "offlineContext_cognitoAuthenticationProvider",
+            "cognitoAuthenticationType": "offlineContext_cognitoAuthenticationType",
+            "cognitoIdentityId": "offlineContext_cognitoIdentityId",
+            "cognitoIdentityPoolId": "offlineContext_cognitoIdentityPoolId",
+            "principalOrgId": null,
+            "sourceIp": "127.0.0.1",
+            "user": "offlineContext_user",
+            "userAgent": "Faraday v0.17.3",
+            "userArn": "offlineContext_userArn"
+        },
+        "path": "/googlechat",
+        "protocol": "HTTP/1.1",
+        "requestId": "ckjydojh4000s2nnccv3e4ug5",
+        "requestTime": "15/Jan/2021:11:29:36 -0300",
+        "requestTimeEpoch": 1610720976278,
+        "resourceId": "offlineContext_resourceId",
+        "resourcePath": "/dev/googlechat",
+        "stage": "dev"
+    },
+    "resource": "/dev/hundio"
+}
