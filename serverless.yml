@@ -24,6 +24,9 @@ provider:
   timemout: 15
   role: ${env:ROLE}
   environment:
+    HUND_WEBHOOK: ${env:HUND_WEBHOOK}
+    AWS_WEBHOOK: ${env:AWS_WEBHOOK}
+    AUDIENCE: ${env:AUDIENCE}
     USERS: ${env:USERS}
     DEV_SGID: ${env:DEV_SGID}
     QA_SGID: ${env:QA_SGID}
@@ -33,7 +36,6 @@ provider:
     GLOBAL_IPSET_FIXED: ${env:GLOBAL_IPSET_FIXED}
     REGIONAL_IPSET_DYNAMIC: ${env:REGIONAL_IPSET_DYNAMIC}
     REGIONAL_IPSET_FIXED: ${env:REGIONAL_IPSET_FIXED}
-    AUDIENCE: ${env:AUDIENCE}
   stackTags:
     environment: tools
     duration: indeterminate
@@ -47,5 +49,11 @@ functions:
     name: ${env:STAGE}-pepe-bot
     events:
       - http:
-          path: googlechat
           method: POST
+          path: googlechat
+      - http:
+          method: POST
+          path: hundio
+      - cloudwatchLog:
+          logGroup: /ecs/dev-fineract-api
+          filter: org.apache.fineract.infrastructure.jobs.exception.JobExecutionException
