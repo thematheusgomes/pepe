@@ -5,8 +5,8 @@ LOGGER = Logger()
 
 def update_ipset(global_ipset, regional_ipset, publicIp, user_name, action):
     params = constructor(publicIp, action)
-    text = update_ip_on_global_ipset(global_ipset, user_name, params, action)
-    text = update_ip_on_regional_ipset(regional_ipset, user_name, params, action)
+    update_ip_on_global_ipset(global_ipset, user_name, params, action)
+    text = update_ip_on_regional_ipset(regional_ipset, user_name, params, action, publicIp[0].replace('/32',''))
     return text
 
 def update_ip_on_global_ipset(global_ipset, user_name, params, action):
@@ -20,12 +20,11 @@ def update_ip_on_global_ipset(global_ipset, user_name, params, action):
             Updates=params
         )
         LOGGER.info(f'Action {action} was successfully performed')
-        return f'{user_name}, your ip has been released and now you can access Agent Portal and Superset'
     except Exception as e:
         LOGGER.error(e)
-        return f'Something went wrong when releasing your IP {user_name}, please contact your administrator'
+        return f'Something went wrong when releasing your IP in the global list {user_name}, please contact your administrator'
 
-def update_ip_on_regional_ipset(regional_ipset, user_name, params, action):
+def update_ip_on_regional_ipset(regional_ipset, user_name, params, action, publicIp):
     LOGGER.info(f'Action {action} will be performed on regional ipset {regional_ipset}')
     try:
         waf_regional = boto3.client('waf-regional')
@@ -36,10 +35,10 @@ def update_ip_on_regional_ipset(regional_ipset, user_name, params, action):
             Updates=params
         )
         LOGGER.info(f'Action {action} was successfully performed')
-        return f'{user_name}, your ip has been released and now you can access Agent Portal and Superset'
+        return f'{user_name}, your ip {publicIp} has been released and now you can access Agent Portal and Superset'
     except Exception as e:
         LOGGER.error(e)
-        return f'Something went wrong when releasing your IP {user_name}, please contact your administrator'
+        return f'Something went wrong when releasing your IP in the regional list {user_name}, please contact your administrator'
 
 def constructor(ips_list, action):
     params = []
