@@ -6,6 +6,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      HUND_WEBHOOK: ${{ secrets.PROD_HUND_WEBHOOK }}
+      AWS_WEBHOOK: ${{ secrets.PROD_AWS_WEBHOOK }}
+      AUDIENCE: ${{ secrets.PROD_AUDIENCE }}
       ROLE: ${{ secrets.ROLE }}
       USERS: ${{ secrets.USERS }}
       DEV_SGID: ${{ secrets.DEV_SGID }}
@@ -16,7 +19,6 @@ jobs:
       GLOBAL_IPSET_FIXED: ${{ secrets.GLOBAL_IPSET_FIXED }}
       REGIONAL_IPSET_DYNAMIC: ${{ secrets.REGIONAL_IPSET_DYNAMIC }}
       REGIONAL_IPSET_FIXED: ${{ secrets.REGIONAL_IPSET_FIXED }}
-      AUDIENCE: ${{ secrets.PROD_AUDIENCE }}
       STAGE: prod
     steps:
       - name: Checkout
