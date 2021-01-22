@@ -1,165 +1,86 @@
 {
-    "body": {
-        "created_at": 1610721219,
-        "event": {
-            "id": "6001a1d385a8fcc34dc0ef7a",
-            "type": "event",
-            "created_at": 1610719699,
-            "kind": "restored",
-            "eventable": {
-                "id": "6001a1d285a8fcc34dc0ef79",
-                "type": "status",
-                "created_at": 1610719698,
-                "updated_at": 1610720598,
-                "watchdog": "60019bb710bdfb5de36caa8e",
-                "state": 1,
-                "duration": 892,
-                "began_at": 1610719698,
-                "ended_at": 1610720598
-            },
-            "contexts": {
-                "component": {
-                    "id": "60019bb710bdfb5de36caa92",
-                    "type": "component",
-                    "created_at": 1610718135,
-                    "updated_at": 1610721205,
-                    "name": "Test - Webhook",
+    "created_at": 1610721219,
+    "event": {
+        "id": "<id>",
+        "type": "event",
+        "created_at": 1610719699,
+        "kind": "restored",
+        "eventable": {
+            "id": "<id>",
+            "type": "status",
+            "created_at": 1610719698,
+            "updated_at": 1610720598,
+            "watchdog": "<id>",
+            "state": 1,
+            "duration": 892,
+            "began_at": 1610719698,
+            "ended_at": 1610720598
+        },
+        "contexts": {
+            "component": {
+                "id": "<id>",
+                "type": "component",
+                "created_at": 1610718135,
+                "updated_at": 1610721205,
+                "name": "Test - Webhook",
+                "description": null,
+                "description_html": "",
+                "group": {
+                    "id": "<id>",
+                    "type": "group",
+                    "created_at": 1606417030,
+                    "updated_at": 1606417030,
+                    "name": "Tools",
                     "description": null,
                     "description_html": "",
-                    "group": {
-                        "id": "5fbffa86386fb374416ee13b",
-                        "type": "group",
-                        "created_at": 1606417030,
-                        "updated_at": 1606417030,
-                        "name": "Tools",
-                        "description": null,
-                        "description_html": "",
-                        "components": [
-                            "60019bb710bdfb5de36caa92"
-                        ]
-                    },
-                    "percent_uptime": 99.9579387345679
-                }
-            },
-            "time_down": 122
+                    "components": [
+                        "<id>"
+                    ]
+                },
+                "percent_uptime": 99.9579387345679
+            }
         },
-        "subscription": {
-            "id": "60019733f4e01e2b0378b94d",
-            "type": "subscription",
-            "created_at": 1610716979,
-            "updated_at": 1610716979,
-            "plugin": "webhook"
-        },
-        "status_page": {
-            "name": "BoomCredit"
-        },
-        "_embedded": {
-            "event": {
-                "_embedded": {
-                    "contexts": {
-                        "_embedded": {
-                            "component": {
-                                "_links": {
-                                    "self-view": {
-                                        "href": "https: //status.boomcredit.net/components/60019bb710bdfb5de36caa92"
-                                    }
+        "time_down": 122
+    },
+    "subscription": {
+        "id": "<id>",
+        "type": "subscription",
+        "created_at": 1610716979,
+        "updated_at": 1610716979,
+        "plugin": "webhook"
+    },
+    "status_page": {
+        "name": "BoomCredit"
+    },
+    "_embedded": {
+        "event": {
+            "_embedded": {
+                "contexts": {
+                    "_embedded": {
+                        "component": {
+                            "_links": {
+                                "self-view": {
+                                    "href": "https: //status.boomcredit.net/components/<id>"
                                 }
                             }
                         }
                     }
                 }
-            },
-            "subscription": {
-                "_links": {
-                    "update-form": {
-                        "href": "https://status.boomcredit.net/subscriptions/60019733f4e01e2b0378b94d/edit"
-                    }
+            }
+        },
+        "subscription": {
+            "_links": {
+                "update-form": {
+                    "href": "https://status.boomcredit.net/subscriptions/<id>/edit"
                 }
-            },
-            "status_page": {
-                "_links": {
-                    "self-view": {
-                        "href": "https://status.boomcredit.net/"
-                    }
+            }
+        },
+        "status_page": {
+            "_links": {
+                "self-view": {
+                    "href": "https://status.boomcredit.net/"
                 }
             }
         }
-    },
-    "headers": {
-        "Host": "d29d40466ea5.ngrok.io",
-        "User-Agent": "Faraday v0.17.3",
-        "Content-Length": "1346",
-        "Accept": "*/*",
-        "Accept-Encoding": "gzip;q=1.0,deflate;q=0.6,identity;q=0.3",
-        "Content-Type": "application/json",
-        "X-Forwarded-For": "54.214.129.100",
-        "X-Forwarded-Proto": "https"
-    },
-    "httpMethod": "POST",
-    "isBase64Encoded": false,
-    "multiValueHeaders": {
-        "Host": [
-            "d29d40466ea5.ngrok.io"
-        ],
-        "User-Agent": [
-            "Faraday v0.17.3"
-        ],
-        "Content-Length": [
-            "1346"
-        ],
-        "Accept": [
-            "*/*"
-        ],
-        "Accept-Encoding": [
-            "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
-        ],
-        "Content-Type": [
-            "application/json"
-        ],
-        "X-Forwarded-For": [
-            "54.214.129.100"
-        ],
-        "X-Forwarded-Proto": [
-            "https"
-        ]
-    },
-    "multiValueQueryStringParameters": null,
-    "path": "/hundio",
-    "pathParameters": null,
-    "queryStringParameters": null,
-    "requestContext": {
-        "accountId": "offlineContext_accountId",
-        "apiId": "offlineContext_apiId",
-        "authorizer": {
-            "principalId": "offlineContext_authorizer_principalId"
-        },
-        "domainName": "offlineContext_domainName",
-        "domainPrefix": "offlineContext_domainPrefix",
-        "extendedRequestId": "ckjydtrfq000u2nnc1m4vfzz7",
-        "httpMethod": "POST",
-        "identity": {
-            "accessKey": null,
-            "accountId": "offlineContext_accountId",
-            "apiKey": "offlineContext_apiKey",
-            "caller": "offlineContext_caller",
-            "cognitoAuthenticationProvider": "offlineContext_cognitoAuthenticationProvider",
-            "cognitoAuthenticationType": "offlineContext_cognitoAuthenticationType",
-            "cognitoIdentityId": "offlineContext_cognitoIdentityId",
-            "cognitoIdentityPoolId": "offlineContext_cognitoIdentityPoolId",
-            "principalOrgId": null,
-            "sourceIp": "127.0.0.1",
-            "user": "offlineContext_user",
-            "userAgent": "Faraday v0.17.3",
-            "userArn": "offlineContext_userArn"
-        },
-        "path": "/hundio",
-        "protocol": "HTTP/1.1",
-        "requestId": "ckjydtrfq000v2nnc0wnbdoh7",
-        "requestTime": "15/Jan/2021:11:33:39 -0300",
-        "requestTimeEpoch": 1610721219875,
-        "resourceId": "offlineContext_resourceId",
-        "resourcePath": "/dev/hundio",
-        "stage": "dev"
-    },
-    "resource": "/dev/hundio"
+    }
 }
