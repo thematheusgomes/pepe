@@ -3,9 +3,7 @@ import json
 import gzip
 from base64 import b64decode
 from httplib2 import Http
-from datetime import datetime
-from src.google_chat_alerts.hund_alerts.hund_cards import HundCardMessages as hundcard
-from src.google_chat_alerts.aws_alerts.aws_cards import AWSCardMessages as awscard
+from src.google_chat_alerts.cards import CardMessages as card
 from src.log import Logger
 
 HUND_WEBHOOK = os.getenv('HUND_WEBHOOK')
@@ -18,11 +16,11 @@ def hund_alerts_handler(event):
     component_id = event['event']['contexts']['component']['id']
     componant_name = event['event']['contexts']['component']['name']
     kind = event['event']['kind']
+    LOGGER.info(f'{componant_name} has {kind}')
     if kind == 'degraded':
         color = '#E74C3C'
         message = f'<b>{componant_name}</b> has gone down.'
-        LOGGER.info(message)
-        hund_message = hundcard.health_check_alert(component_id, kind, color, message)
+        hund_message = card.health_check_alert(component_id, kind, color, message)
         send_message(HUND_WEBHOOK ,hund_message)
     elif kind == 'restored':
         color = '#2ECC71'
@@ -30,8 +28,7 @@ def hund_alerts_handler(event):
         ended_timestamp = int(event['event']['eventable']['ended_at'])
         interval_timestamp = (ended_timestamp - began_timestamp)/60
         message = f'<b>{componant_name}</b> is back online.<br>It was down for <b>{round(interval_timestamp)}</b> minutes.'
-        LOGGER.info(message)
-        hund_message = hundcard.health_check_alert(component_id, kind, color, message)
+        hund_message = card.health_check_alert(component_id, kind, color, message)
         send_message(HUND_WEBHOOK, hund_message)
     else:
         LOGGER.error('Invalid type of Hundio status')
@@ -43,7 +40,7 @@ def awslogs_handler(event):
     count = 0
     for event in payload['logEvents']:
         count += 1
-    bot_message = awscard.awslogs_exceptions(logGroup, filterName, str(count))
+    bot_message = card.awslogs_exceptions(logGroup, filterName, str(count))
     send_message(AWS_WEBHOOK ,bot_message)
 
 def awslogs_decode(event):
@@ -56,13 +53,15 @@ def awslogs_decode(event):
 def send_message(webhook, bot_message):
     http_obj = Http()
     message_headers = {'Content-Type': 'application/json; charset=UTF-8'}
+    LOGGER.info(f'Message to be sent: {json.dumps(bot_message)}')
     try:
-        http_obj.request(
+        response = http_obj.request(
             uri=webhook,
             method='POST',
             headers=message_headers,
             body=json.dumps(bot_message),
         )
         LOGGER.info('Message sent successfully')
+        LOGGER.info(response)
     except Exception as e:
-        LOGGER.error(e)        
+        LOGGER.error(e)
