@@ -54,6 +54,7 @@ def awslogs_decode(event):
     compressed_payload = b64decode(cw_data)
     uncompressed_payload = gzip.decompress(compressed_payload)
     payload = json.loads(uncompressed_payload)
+    LOGGER.info(f'Uncompressed log payload: {payload}')
     return payload
 
 def send_message(webhook, bot_message):
