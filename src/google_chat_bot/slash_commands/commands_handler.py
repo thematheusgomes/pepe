@@ -27,19 +27,21 @@ def waf_ip_release_handler(args, user_name, user_email):
     elif args[0] == 'clean':
         return waf.clean_ips_handler(user_name, user_email)
     elif args[0] == 'help':
-        return f'Hey {user_name},\n\nI\'ll show you the arguments you can use with the `iprelease` command:\n\n-> /iprelease `<publicIp>`\n-> /iprelease dynamic `<publicIp>`\n-> /iprelease fixed `<publicIp>`\n-> /iprelease clean\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
+        return f'Hey {user_name},\n\nI\'ll show you the arguments you can use with the `iprelease` command:\n\n-> `/iprelease <publicIp>` (Add your ip to the dynamic ips list)\n-> `/iprelease dynamic <publicIp>` (Another option that add your ip to the dynamic ips list)\n-> `/iprelease fixed <publicIp>` (Add your ip to the fixed ips list)\n-> `/iprelease clean` (Remove all ips from dynamic ips list)\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
     elif validate_ip(args[0]):
         return waf.dynamic_ip_handler(args[0], user_name, user_email)
     else:
         LOGGER.error(f'Invalid arguments: {args}')
-        return 'Invalid arguments\n\nThis command will accept only the following arguments:\n\n-> /iprelease `<publicIp>`\n-> /iprelease dynamic `<publicIp>`\n-> /iprelease fixed `<publicIp>`\n-> /iprelease clean\n-> /iprelease help\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
+        return f'Hey {user_name},\n\nThis argument is invalid, currently I\'m accepting only the arguments below:\n\n-> `/sgipupdate help` (Shows a message similar to that with all accepted arguments for this command)\n-> `/iprelease <publicIp>` (Add your ip to the dynamic ips list)\n-> `/iprelease dynamic <publicIp>` (Another option that add your ip to the dynamic ips list)\n-> `/iprelease fixed <publicIp>` (Add your ip to the fixed ips list)\n-> `/iprelease clean` (Remove all ips from dynamic ips list)\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
 
 def sg_ip_release_handler(args, user_name, user_email):
     if args[0] == 'dev' or args[0] == 'qa' or args[0] == 'prod' or args[0] == 'tools' and validate_ip(args[1]):
         return security_group_handler(args[0], args[1], user_name, user_email)
+    elif args[0] == 'help':
+        return f'Hey {user_name},\n\nI\'ll show you the arguments you can use with the `sgipupdate` command:\n\n-> `/sgipupdate dev <publicIp>` (Update IP in the Dev Security Group)\n-> `/sgipupdate qa <publicIp>` (Update IP in the Qa Security Group)\n-> `/sgipupdate prod <publicIp>` (Update IP in the Prod Security Group)\n-> `/sgipupdate tools <publicIp>` (Update IP in the Tools Security Group)\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
     else:
         LOGGER.error(f'Invalid arguments: {args}')
-        return 'Invalid arguments\n\nThis command will accept only the following arguments:\n\n> /sgiprelease dev `<publicIp>`\n> /sgiprelease qa `<publicIp>`\n> /sgiprelease prod `<publicIp>`\n> /sgiprelease tools `<publicIp>`'
+        return f'Hey {user_name},\n\nThis argument is invalid, currently I\'m accepting only the arguments below:\n\n-> `/sgipupdate help` (Shows a message similar to that with all accepted arguments for this command)\n-> `/sgipupdate dev <publicIp>` (Update IP in the Dev Security Group)\n-> `/sgipupdate qa <publicIp>` (Update IP in the Qa Security Group)\n-> `/sgipupdate prod <publicIp>` (Update IP in the Prod Security Group)\n-> `/sgipupdate tools <publicIp>` (Update IP in the Tools Security Group)\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
 
 def validate_ip(publicIp):
     try:
