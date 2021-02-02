@@ -1,6 +1,6 @@
 import os
 import boto3
-from src.google_chat.user_authorization import user_authorization
+from src.bot.user_authorization import user_authorization
 from src.log import Logger, data_log
 
 LOGGER = Logger()
@@ -16,36 +16,36 @@ def security_group_handler(arg, publicIp, user_name, user_email):
         if user_authorization(user_name, user_email, type = 'dev') or user_authorization(user_name, user_email, type = 'admin'):
             security_group = ec2.SecurityGroup(DEV_SGID)
             revoke_previous_ip(arg, security_group, user_name, ipreg = security_group.ip_permissions[0])
-            text = authorize_ingress(arg, security_group, user_name, publicIp)
+            message = authorize_ingress(arg, security_group, user_name, publicIp)
             print(data_log(publicIp, user_name, user_email, type = 'sg_dev'))
-            return text
+            return message
         else:
             return f'{user_name} you are not authorized to peform this command, please contact your administrator'
     elif arg == 'qa':
         if user_authorization(user_name, user_email, type = 'dev') or user_authorization(user_name, user_email, type = 'admin'):
             security_group = ec2.SecurityGroup(QA_SGID)
             revoke_previous_ip(arg, security_group, user_name, ipreg = security_group.ip_permissions[0])
-            text = authorize_ingress(arg, security_group, user_name, publicIp)
+            message = authorize_ingress(arg, security_group, user_name, publicIp)
             print(data_log(publicIp, user_name, user_email, type = 'sg_qa'))
-            return text
+            return message
         else:
             return f'{user_name} you are not authorized to peform this command, please contact your administrator'
     elif arg == 'prod':
         if user_authorization(user_name, user_email, type = 'admin'):
             security_group = ec2.SecurityGroup(PROD_SGID)
             revoke_previous_ip(arg, security_group, user_name, ipreg = security_group.ip_permissions[2])
-            text = authorize_ingress(arg, security_group, user_name, publicIp)
+            message = authorize_ingress(arg, security_group, user_name, publicIp)
             print(data_log(publicIp, user_name, user_email, type = 'sg_prod'))
-            return text
+            return message
         else:
             return f'{user_name} you are not authorized to peform this command, please contact your administrator'
     elif arg == 'tools':
         if user_authorization(user_name, user_email, type = 'admin'):
             security_group = ec2.SecurityGroup(TOOLS_SGID)
             revoke_previous_ip(arg, security_group, user_name, ipreg = security_group.ip_permissions[0])
-            text = authorize_ingress(arg, security_group, user_name, publicIp)
+            message = authorize_ingress(arg, security_group, user_name, publicIp)
             print(data_log(publicIp, user_name, user_email, type = 'sg_tools'))
-            return text
+            return message
         else:
             return f'{user_name} you are not authorized to peform this command, please contact your administrator'
 

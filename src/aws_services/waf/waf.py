@@ -1,7 +1,7 @@
 import os
-from src.aws_waf.update_ipset import update_ipset
-from src.aws_waf.clean_ipset import clean_ipset
-from src.google_chat.user_authorization import user_authorization
+from src.aws_services.waf.update_ipset import update_ipset
+from src.aws_services.waf.clean_ipset import clean_ipset
+from src.bot.user_authorization import user_authorization
 from src.log import data_log
 
 GLOBAL_IPSET_DYNAMIC = os.getenv('GLOBAL_IPSET_DYNAMIC')
@@ -11,16 +11,16 @@ REGIONAL_IPSET_FIXED = os.getenv('REGIONAL_IPSET_FIXED')
 
 def dynamic_ip_handler(publicIp, user_name, user_email):
     publicIp = [publicIp+'/32']
-    text = update_ipset(GLOBAL_IPSET_DYNAMIC, REGIONAL_IPSET_DYNAMIC, publicIp, user_name, action = 'INSERT')
+    message = update_ipset(GLOBAL_IPSET_DYNAMIC, REGIONAL_IPSET_DYNAMIC, publicIp, user_name, action = 'INSERT')
     print(data_log(publicIp, user_name, user_email, type = 'waf_dynamic'))
-    return text
+    return message
 
 def fixed_ip_handler(publicIp, user_name, user_email):
     if user_authorization(user_name, user_email, type = 'admin'):
         publicIp = [publicIp+'/32']
-        text = update_ipset(GLOBAL_IPSET_FIXED, REGIONAL_IPSET_FIXED, publicIp, user_name, action = 'INSERT')
+        message = update_ipset(GLOBAL_IPSET_FIXED, REGIONAL_IPSET_FIXED, publicIp, user_name, action = 'INSERT')
         print(data_log(publicIp, user_name, user_email, type = 'waf_fixed'))
-        return text
+        return message
     else:
         return f'{user_name}, you are not authorized to execute this command, please contact your administrators'
 

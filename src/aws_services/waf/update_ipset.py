@@ -6,8 +6,8 @@ LOGGER = Logger()
 def update_ipset(global_ipset, regional_ipset, publicIp, user_name, action):
     params = constructor(publicIp, action)
     update_ip_on_global_ipset(global_ipset, user_name, params, action)
-    text = update_ip_on_regional_ipset(regional_ipset, user_name, params, action)
-    return text
+    message = update_ip_on_regional_ipset(regional_ipset, user_name, params, action)
+    return message
 
 def update_ip_on_global_ipset(global_ipset, user_name, params, action):
     LOGGER.info(f'Action {action} will be performed on global ipset {global_ipset}')

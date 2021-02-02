@@ -3,7 +3,7 @@ import json
 import gzip
 from base64 import b64decode
 from httplib2 import Http
-from src.google_chat_alerts.cards import CardMessages as card
+from src.alerts.cards import CardMessages as card
 from src.log import Logger
 
 HUND_WEBHOOK = os.getenv('HUND_WEBHOOK')
@@ -25,11 +25,17 @@ def hund_alerts_handler(event):
     elif kind == 'restored':
         color = '#2ECC71'
         began_timestamp = int(event['event']['eventable']['began_at'])
-        ended_timestamp = int(event['event']['eventable']['ended_at'])
-        interval_timestamp = (ended_timestamp - began_timestamp)/60
-        message = f'<b>{componant_name}</b> is back online.<br>It was down for <b>{round(interval_timestamp)}</b> minutes.'
-        hund_message = card.health_check_alert(component_id, kind, color, message)
-        send_message(HUND_WEBHOOK, hund_message)
+        if 'ended_at' in event['event']['eventable'].keys():
+            ended_timestamp = int(event['event']['eventable']['ended_at'])
+            interval_timestamp = (ended_timestamp - began_timestamp)/60
+            message = f'<b>{componant_name}</b> is back online.<br>It was down for <b>{round(interval_timestamp)}</b> minutes.'
+            hund_message = card.health_check_alert(component_id, kind, color, message)
+            send_message(HUND_WEBHOOK, hund_message)
+        else:
+            LOGGER.info('The restore event didn\'t come with the key \'ended_at\'')
+            message = f'<b>{componant_name}</b> is back online'
+            hund_message = card.health_check_alert(component_id, kind, color, message)
+            send_message(HUND_WEBHOOK, hund_message)
     else:
         LOGGER.error('Invalid type of Hundio status')
 
@@ -48,6 +54,7 @@ def awslogs_decode(event):
     compressed_payload = b64decode(cw_data)
     uncompressed_payload = gzip.decompress(compressed_payload)
     payload = json.loads(uncompressed_payload)
+    LOGGER.info(f'Uncompressed log payload: {payload}')
     return payload
 
 def send_message(webhook, bot_message):

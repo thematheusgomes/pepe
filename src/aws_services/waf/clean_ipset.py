@@ -1,6 +1,6 @@
 import boto3
 from src.log import Logger
-import src.aws_waf.update_ipset as waf
+import src.aws_services.waf.update_ipset as waf
 
 LOGGER = Logger()
 
