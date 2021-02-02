@@ -3,7 +3,7 @@ import json
 import gzip
 from base64 import b64decode
 from httplib2 import Http
-from src.google_chat_alerts.cards import CardMessages as card
+from src.alerts.cards import CardMessages as card
 from src.log import Logger
 
 HUND_WEBHOOK = os.getenv('HUND_WEBHOOK')

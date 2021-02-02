@@ -1,7 +1,7 @@
 import os
-from src.aws_waf.update_ipset import update_ipset
-from src.aws_waf.clean_ipset import clean_ipset
-from src.google_chat_bot.user_authorization import user_authorization
+from src.aws_services.waf.update_ipset import update_ipset
+from src.aws_services.waf.clean_ipset import clean_ipset
+from src.bot.user_authorization import user_authorization
 from src.log import data_log
 
 GLOBAL_IPSET_DYNAMIC = os.getenv('GLOBAL_IPSET_DYNAMIC')

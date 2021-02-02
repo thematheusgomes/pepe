@@ -1,8 +1,8 @@
 import json
 from src.log import Logger
-from src.google_chat_alerts.alerts import hund_alerts_handler, awslogs_handler
-from src.google_chat_bot.slash_commands.commands_handler import select_command
-from src.google_chat_bot.bot_authorization import authorization
+from src.alerts.alerts import hund_alerts_handler, awslogs_handler
+from src.bot.slash_commands.commands_handler import select_command
+from src.bot.bot_authorization import authorization
 
 LOGGER = Logger()
 
