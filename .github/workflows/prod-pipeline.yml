@@ -6,8 +6,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
+      PEPE_WEBHOOK: ${{ secrets.PEPE_WEBHOOK }}
       AUDIENCE: ${{ secrets.PROD_AUDIENCE }}
-      USER_PERMISSIONS: ${{ secrets.USERS }}
+      USER_PERMISSIONS: ${{ secrets.USER_PERMISSIONS }}
       DEV_SGID: ${{ secrets.DEV_SGID }}
       QA_SGID: ${{ secrets.QA_SGID }}
       PROD_SGID: ${{ secrets.PROD_SGID }}
