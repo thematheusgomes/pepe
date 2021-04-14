@@ -16,11 +16,11 @@ def handler(event, context):
     return response(message)
 
 def bot_handler(event):
+    token = event['headers']['Authorization'].replace('Bearer ', '')
+    authorization(token)
     event = json.loads(event['body'])
     user_email = event['user']['email']
     user_name = event['user']['displayName'] if event['user']['displayName'] else 'Dear'
-    token = event['headers']['Authorization'].replace('Bearer ', '')
-    authorization(token)
     if event['type'] == 'ADDED_TO_SPACE' and 'singleUserBotDm' in event['space'].keys():
         message = f'Thanks for starting to chat with me {user_name}, I will be very happy to help you!\n\nThe commands I have available are:\n\n-> `/iprelease`\n-> `/sgipupdate`'
         LOGGER.info(f'User {user_name} starts a conversation with Pepe')
