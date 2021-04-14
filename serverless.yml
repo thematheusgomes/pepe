@@ -46,14 +46,24 @@ provider:
 functions:
   pepe:
     handler: src/app.handler
-    name: ${env:STAGE}-pepe-bot
+    name: ${self:provider.stage}-pepe-bot
     events:
       - http:
           method: POST
           path: googlechat
-      - http:
-          method: POST
-          path: hundio
-      - cloudwatchLog:
-          logGroup: /ecs/dev-fineract-api
-          filter: org.apache.fineract.infrastructure.jobs.exception.JobExecutionException
+      - schedule:
+        name: clear-waf-dynamic-ips
+        description: Clear  all waf dynamic ips
+        rate: cron(0 9 ? */2 MON *)
+        input:
+          resource: cloudwatch events
+          user:
+            displayName: DevOps
+            email: devops@boomcredit.net
+          message:
+            argumentText: clean
+            annotations:
+              - slashCommand:
+                commandName: '/iprelease'
+            slashCommand:
+              commandId: 1
