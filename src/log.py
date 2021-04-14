@@ -6,14 +6,14 @@ import sys
 import json
 from datetime import datetime
 
-def data_log(publicIp, user_name, user_email, type):
+def data_log(ip_info, user_name, user_email, type):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return json.dumps({
-        "user_name": f"{user_name}",
-        "email": f"{user_email}",
-        "type": f"{type}",
-        "publicIp": publicIp,
-        "timestamp": f"{timestamp}"
+        "user_name": user_name,
+        "email": user_email,
+        "type": type,
+        "ip_address": ip_info,
+        "timestamp": timestamp
     })
 
 def _build():

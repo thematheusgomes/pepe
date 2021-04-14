@@ -37,7 +37,7 @@ def bot_handler(event):
     return message
 
 def response(message):
-    LOGGER.info('Sending the message to Google Chat')
+    LOGGER.info('Sending message to Google Chat')
     return ({
             "statusCode": 200,
             "headers": {
