@@ -22,16 +22,15 @@ def select_command(event, user_name, user_email):
 def waf_ip_release_handler(args, user_name, user_email):
     if len(args) in range(3):
         if args[0] == 'dynamic' and ip_address(args[1]).is_global:
-            return waf.dynamic_ip_handler(args[1], user_name, user_email)
+            return waf.dynamic_ip_handler(ip_version(args[1]), user_name, user_email)
         elif args[0] == 'fixed' and ip_address(args[1]).is_global:
-            return waf.fixed_ip_handler(args[1], user_name, user_email)
+            return waf.fixed_ip_handler(ip_version(args[1]), user_name, user_email)
         elif args[0] == 'clean':
             return waf.clean_ips_handler(user_name, user_email)
         elif args[0] == 'help':
             return f'Hey {user_name},\n\nI\'ll show you the arguments you can use with the `iprelease` command:\n\n-> `/iprelease <publicIp>` (Add your ip to the dynamic ips list)\n-> `/iprelease dynamic <publicIp>` (Another option that add your ip to the dynamic ips list)\n-> `/iprelease fixed <publicIp>` (Add your ip to the fixed ips list)\n-> `/iprelease clean` (Remove all ips from dynamic ips list)\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
         elif ip_address(args[0]).is_global:
-            ipv = ip_version(args[0])
-            return waf.dynamic_ip_handler(ipv, user_name, user_email)
+            return waf.dynamic_ip_handler(ip_version(args[0]), user_name, user_email)
         else:
             LOGGER.error(f'Invalid arguments: {args}')
             return f'Hey {user_name},\n\nThis argument is invalid, currently I\'m accepting only the arguments below:\n\n-> `/sgipupdate help` (Shows a message similar to that with all accepted arguments for this command)\n-> `/iprelease <publicIp>` (Add your ip to the dynamic ips list)\n-> `/iprelease dynamic <publicIp>` (Another option that add your ip to the dynamic ips list)\n-> `/iprelease fixed <publicIp>` (Add your ip to the fixed ips list)\n-> `/iprelease clean` (Remove all ips from dynamic ips list)\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
