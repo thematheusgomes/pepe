@@ -1,0 +1,20 @@
+{
+    "resource": "cloudwatch events",
+    "user": {
+        "displayName": "DevOps",
+        "email": "devops@boomcredit.net"
+    },
+    "message": {
+        "argumentText": "clean",
+        "annotations": [
+            {
+               "slashCommand": {
+                   "commandName": "/iprelease"
+               } 
+            }
+        ],
+        "slashCommand": {
+            "commandId": "1"
+        }
+    }
+}
