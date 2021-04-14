@@ -18,7 +18,7 @@ def get_global_ipset(global_ipset, publicIps):
         global_client = boto3.client('waf')
         response = global_client.get_ip_set(IPSetId=global_ipset)
         for ip in response['IPSet']['IPSetDescriptors']:
-            publicIps.append(ip['Value'])
+            publicIps.append(ip_version(ip['Value']))
         LOGGER.info('Global ips list was successfully generated')
         return publicIps
     except Exception as e:
@@ -29,8 +29,17 @@ def get_regional_ipset(global_ipset, publicIps):
         regional_client = boto3.client('waf-regional')
         response = regional_client.get_ip_set(IPSetId=global_ipset)
         for ip in response['IPSet']['IPSetDescriptors']:
-            publicIps.append(ip['Value'])
+            publicIps.append(ip_version(ip['Value']))
         LOGGER.info('Regional ips list was successfully generated')
         return publicIps
+    except Exception as e:
+        LOGGER.error(e)
+
+def ip_version(ip):
+    try:
+        if '/32' in ip:
+            return {'IpAddress': ip, 'Version': 'IPV4'}
+        elif '/128' in ip:
+            return {'IpAddress': ip, 'Version': 'IPV6'}
     except Exception as e:
         LOGGER.error(e)

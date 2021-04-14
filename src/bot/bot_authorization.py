@@ -17,6 +17,7 @@ AUDIENCE = os.getenv('AUDIENCE')
 # Get this value from the request's Authorization HTTP header.
 # For example, for 'Authorization: Bearer AbCdEf123456' use 'AbCdEf123456'.
 def authorization(BEARER_TOKEN):
+    '''Check token authenticity'''
     try:
         # Verify valid token, signed by CHAT_ISSUER, intended for a third party.
         token = client.verify_id_token(

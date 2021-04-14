@@ -9,17 +9,15 @@ GLOBAL_IPSET_FIXED = os.getenv('GLOBAL_IPSET_FIXED')
 REGIONAL_IPSET_DYNAMIC = os.getenv('REGIONAL_IPSET_DYNAMIC')
 REGIONAL_IPSET_FIXED = os.getenv('REGIONAL_IPSET_FIXED')
 
-def dynamic_ip_handler(publicIp, user_name, user_email):
-    publicIp = [publicIp+'/32']
-    message = update_ipset(GLOBAL_IPSET_DYNAMIC, REGIONAL_IPSET_DYNAMIC, publicIp, user_name, action = 'INSERT')
-    print(data_log(publicIp, user_name, user_email, type = 'waf_dynamic'))
+def dynamic_ip_handler(ipv, user_name, user_email):
+    message = update_ipset(GLOBAL_IPSET_DYNAMIC, REGIONAL_IPSET_DYNAMIC, ipv, user_name, action = 'INSERT')
+    print(data_log(ipv, user_name, user_email, type = 'waf_dynamic'))
     return message
 
-def fixed_ip_handler(publicIp, user_name, user_email):
+def fixed_ip_handler(ipv, user_name, user_email):
     if user_authorization(user_name, user_email, type = 'admin'):
-        publicIp = [publicIp+'/32']
-        message = update_ipset(GLOBAL_IPSET_FIXED, REGIONAL_IPSET_FIXED, publicIp, user_name, action = 'INSERT')
-        print(data_log(publicIp, user_name, user_email, type = 'waf_fixed'))
+        message = update_ipset(GLOBAL_IPSET_FIXED, REGIONAL_IPSET_FIXED, ipv, user_name, action = 'INSERT')
+        print(data_log(ipv, user_name, user_email, type = 'waf_fixed'))
         return message
     else:
         return f'{user_name}, you are not authorized to execute this command, please contact your administrators'

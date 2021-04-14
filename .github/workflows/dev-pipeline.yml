@@ -6,11 +6,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      HUND_WEBHOOK: ${{ secrets.DEV_HUND_WEBHOOK }}
-      AWS_WEBHOOK: ${{ secrets.DEV_AWS_WEBHOOK }}
+      AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
+      PEPE_WEBHOOK: ${{ secrets.PEPE_WEBHOOK }}
       AUDIENCE: ${{ secrets.DEV_AUDIENCE }}
-      ROLE: ${{ secrets.ROLE }}
-      USERS: ${{ secrets.USERS }}
+      USER_PERMISSIONS: ${{ secrets.USER_PERMISSIONS }}
       DEV_SGID: ${{ secrets.DEV_SGID }}
       QA_SGID: ${{ secrets.QA_SGID }}
       PROD_SGID: ${{ secrets.PROD_SGID }}
@@ -19,7 +18,6 @@ jobs:
       GLOBAL_IPSET_FIXED: ${{ secrets.GLOBAL_IPSET_FIXED }}
       REGIONAL_IPSET_DYNAMIC: ${{ secrets.REGIONAL_IPSET_DYNAMIC }}
       REGIONAL_IPSET_FIXED: ${{ secrets.REGIONAL_IPSET_FIXED }}
-      STAGE: dev
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -31,8 +29,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.8.x'
-      - name: Install Serverless Packages
-        run: npm install
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -40,7 +36,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy
-        run: npx serverless deploy --stage $STAGE
+        run: npm run deploy:dev
       - name: Google Chat Notification
         uses: Co-qn/google-chat-notification@releases/v1
         if: always()

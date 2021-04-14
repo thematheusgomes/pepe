@@ -21,21 +21,48 @@ provider:
   runtime: python3.8
   region: us-east-1
   memorySize: 128
-  timemout: 15
-  role: ${env:ROLE}
+  timeout: 15
   environment:
-    HUND_WEBHOOK: ${env:HUND_WEBHOOK}
-    AWS_WEBHOOK: ${env:AWS_WEBHOOK}
-    AUDIENCE: ${env:AUDIENCE}
-    USERS: ${env:USERS}
-    DEV_SGID: ${env:DEV_SGID}
-    QA_SGID: ${env:QA_SGID}
-    PROD_SGID: ${env:PROD_SGID}
-    TOOLS_SGID: ${env:TOOLS_SGID}
-    GLOBAL_IPSET_DYNAMIC: ${env:GLOBAL_IPSET_DYNAMIC}
-    GLOBAL_IPSET_FIXED: ${env:GLOBAL_IPSET_FIXED}
-    REGIONAL_IPSET_DYNAMIC: ${env:REGIONAL_IPSET_DYNAMIC}
-    REGIONAL_IPSET_FIXED: ${env:REGIONAL_IPSET_FIXED}
+    PEPE_WEBHOOK: ${ env:PEPE_WEBHOOK }
+    AUDIENCE: ${ env:AUDIENCE }
+    USER_PERMISSIONS: ${ env:USER_PERMISSIONS }
+    DEV_SGID: ${ env:DEV_SGID }
+    QA_SGID: ${ env:QA_SGID }
+    PROD_SGID: ${ env:PROD_SGID }
+    TOOLS_SGID: ${ env:TOOLS_SGID }
+    GLOBAL_IPSET_DYNAMIC: ${ env:GLOBAL_IPSET_DYNAMIC }
+    GLOBAL_IPSET_FIXED: ${ env:GLOBAL_IPSET_FIXED }
+    REGIONAL_IPSET_DYNAMIC: ${ env:REGIONAL_IPSET_DYNAMIC }
+    REGIONAL_IPSET_FIXED: ${ env:REGIONAL_IPSET_FIXED }
+  iam:
+    role:
+      name: pepe-${self:provider.stage}-role
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'ec2:RevokeSecurityGroupIngress'
+            - 'ec2:AuthorizeSecurityGroupIngress'
+          Resource:
+            - 'arn:aws:ec2:us-east-1:${ env:AWS_ACCOUNT }:security-group/${ env:DEV_SGID }'
+            - 'arn:aws:ec2:us-east-1:${ env:AWS_ACCOUNT }:security-group/${ env:QA_SGID }'
+            - 'arn:aws:ec2:us-east-1:${ env:AWS_ACCOUNT }:security-group/${ env:PROD_SGID }'
+            - 'arn:aws:ec2:us-east-1:${ env:AWS_ACCOUNT }:security-group/${ env:TOOLS_SGID }'
+        - Effect: 'Allow'
+          Action:
+            - 'ec2:DescribeSecurityGroups'
+          Resource:
+            - '*'
+        - Effect: 'Allow'
+          Action:
+            - 'waf:UpdateIPSet'
+            - 'waf:GetIPSet'
+            - 'waf-regional:UpdateIPSet'
+            - 'waf-regional:GetIPSet'
+          Resource:
+            - 'arn:aws:waf-regional:us-east-1:${ env:AWS_ACCOUNT }:ipset/${ env:REGIONAL_IPSET_DYNAMIC }'
+            - 'arn:aws:waf-regional:us-east-1:${ env:AWS_ACCOUNT }:ipset/${ env:REGIONAL_IPSET_FIXED }'
+            - 'arn:aws:waf::${ env:AWS_ACCOUNT }:ipset/${ env:GLOBAL_IPSET_DYNAMIC }'
+            - 'arn:aws:waf::${ env:AWS_ACCOUNT }:ipset/${ env:GLOBAL_IPSET_FIXED }'
   stackTags:
     environment: tools
     duration: indeterminate
@@ -46,14 +73,24 @@ provider:
 functions:
   pepe:
     handler: src/app.handler
-    name: ${env:STAGE}-pepe-bot
+    name: ${self:provider.stage}-pepe-bot
     events:
       - http:
           method: POST
           path: googlechat
-      - http:
-          method: POST
-          path: hundio
-      - cloudwatchLog:
-          logGroup: /ecs/dev-fineract-api
-          filter: org.apache.fineract.infrastructure.jobs.exception.JobExecutionException
+      - schedule:
+        name: clear-waf-dynamic-ips
+        description: Clear  all waf dynamic ips
+        rate: cron(0 9 ? */2 MON *)
+        input:
+          resource: cloudwatch events
+          user:
+            displayName: DevOps
+            email: devops@boomcredit.net
+          message:
+            argumentText: clean
+            annotations:
+              - slashCommand:
+                commandName: '/iprelease'
+            slashCommand:
+              commandId: 1

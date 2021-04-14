@@ -1,35 +1,24 @@
 import json
 from src.log import Logger
-from src.alerts.alerts import hund_alerts_handler, awslogs_handler
-from src.bot.slash_commands.commands_handler import select_command
+from src.bot.messages.send_messages import send_message_to_rooms
 from src.bot.bot_authorization import authorization
+from src.bot.slash_commands.commands_handler import select_command
 
 LOGGER = Logger()
 
 def handler(event, context):
     """Handles an event from Google Chat."""
     LOGGER.info(f'Event: {json.dumps(event)}')
-    message = filter_events(event)
+    if 'headers' not in event and 'resource' in event and event['resource'] == 'cloudwatch events':
+        message = select_command(event, event['user']['displayName'], event['user']['email'])
+        return send_message_to_rooms(message)
+    message = bot_handler(event)
     return response(message)
-
-def filter_events(event):
-    if 'awslogs' in event.keys():
-        LOGGER.info('Request type: AWS Logs')
-        awslogs_handler(event)
-    elif event['path'] == '/googlechat':
-        LOGGER.info('Request type: Pepe Bot')
-        return bot_handler(event)
-    elif event['path'] == '/hundio':
-        LOGGER.info('Request type: Hund Alerts')
-        hund_alerts_handler(event)
-    else:
-        LOGGER.error('Invalid event')
 
 def bot_handler(event):
     token = event['headers']['Authorization'].replace('Bearer ', '')
-    event = json.loads(event['body'])
-    # Check the authenticity of the token sent
     authorization(token)
+    event = json.loads(event['body'])
     user_email = event['user']['email']
     user_name = event['user']['displayName'] if event['user']['displayName'] else 'Dear'
     if event['type'] == 'ADDED_TO_SPACE' and 'singleUserBotDm' in event['space'].keys():
@@ -48,7 +37,7 @@ def bot_handler(event):
     return message
 
 def response(message):
-    LOGGER.info('Sending the message to Google Chat')
+    LOGGER.info('Sending message to Google Chat')
     return ({
             "statusCode": 200,
             "headers": {
