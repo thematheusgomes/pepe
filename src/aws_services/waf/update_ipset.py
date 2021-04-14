@@ -3,8 +3,8 @@ from src.log import Logger
 
 LOGGER = Logger()
 
-def update_ipset(global_ipset, regional_ipset, publicIp, user_name, action):
-    params = constructor(publicIp, action)
+def update_ipset(global_ipset, regional_ipset, ip_list, user_name, action):
+    params = constructor(ip_list, action)
     update_ip_on_global_ipset(global_ipset, user_name, params, action)
     message = update_ip_on_regional_ipset(regional_ipset, user_name, params, action)
     return message
@@ -40,15 +40,15 @@ def update_ip_on_regional_ipset(regional_ipset, user_name, params, action):
         LOGGER.error(e)
         return f'Something went wrong when releasing your IP in the regional list {user_name}, please contact your administrator'
 
-def constructor(ips_list, action):
+def constructor(ip_list, action):
     params = []
-    for publicIp in ips_list:
+    for ip in ip_list:
         params.append(
             {
                 'Action': action,
                 'IPSetDescriptor': {
-                    'Type': 'IPV4',
-                    'Value': publicIp
+                    'Type': ip['Version'],
+                    'Value': ip['IpAddress']
                 }
             }
         )
