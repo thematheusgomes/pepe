@@ -29,6 +29,8 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.8.x'
+      - name: Install Serverless Framework
+        run: npm install
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -36,9 +38,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy
-        run: |
-          source scripts.sh
-          py-prod-deploy
+        run: npx serverless deploy --stage prod
       - name: Google Chat Notification
         uses: Co-qn/google-chat-notification@releases/v1
         if: always()
