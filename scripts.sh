@@ -1,7 +1,6 @@
 # set -e
 ENVPATH=".venv"
 VLOCK="0"
-PROJECT="pepe"
 OLDPYTHONPATH=''
 
 function py-env() {
@@ -30,18 +29,6 @@ function py-d-env() {
     fi
 }
 
-function aws-check() {
-    if [ -z "$AWS_ACCESS_KEY_ID" ] || [ -z "$AWS_SECRET_ACCESS_KEY" ] || [ -z "$AWS_SESSION_TOKEN" ]
-    then
-      echo " [WARN] Missing AWS permission using env: "
-      echo "- \$AWS_ACCESS_KEY_ID"
-      echo "- \$AWS_SECRET_ACCESS_KEY"
-      echo "- \$AWS_SESSION_TOKEN"
-      echo "$YELLOW [WARN] The following commands will fail if no credentials are configured on fallback ~/.aws/config $YELLOW"
-
-    fi
-}
-
 function py-update-pip() {
     pip install --upgrade pip
 }
@@ -49,47 +36,23 @@ function py-update-pip() {
 function py-install() {
     py-env
     py-update-pip
-    echo "[production] py-install..."
+    echo "Installing Python Modules..."
     pip3 install -r ./requirements.txt
-}
-
-function py-install-dev() {
-    py-env
-    py-update-pip
-    echo "[development] py-install..."
-    pip3 install -r ./requirements.dev.txt
+    echo "Installing Serverless Framework..."
     npm install
 }
 
-function lambda-permissions() {
-    cd $1
-    chmod 755 $(find $(pwd) -type d)
-    chmod 644 $(find $(pwd) -type f)
-    cd ..
+function py-deploy() {
+    npm install
+    serverless deploy --stage dev
 }
 
-function py-zip() {
-    py-d-env
-    py-env
-    cp -R ./waf.json ./build
-    cp -R ./src/lambda.py ./build/
-    cp -R ./src/main ./build
-    lambda-permissions ./build
-    cd ./build
-    zip -q -rMM9 $PROJECT.zip .
-    mv $PROJECT.zip ../
-    cd ..
-    py-d-env
+function py-destroy() {
+    npm install
+    serverless remove --stage dev
 }
 
-function py-build() {
-    py-d-env
-    py-env
-    rm -rf $ENVPATH/ ./build/ $(find ./src/ -name __pycache__) $PROJECT.zip
-    mkdir ./build
-    py-install
-    py-zip
-    py-d-env
-    rm -rf $ENVPATH/ $(find ./src/ -name __pycache__)
-    py-install-dev
+function py-prod-deploy() {
+    npm install
+    serverless deploy --stage prod
 }

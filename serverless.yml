@@ -6,9 +6,9 @@ plugins:
   - serverless-plugin-resource-tagging
 
 package:
-  exclude:
-    - ./**
-    - '!src/**'
+  patterns:
+    - '!./**'
+    - 'src/**'
 
 custom:
   pythonRequirements:
@@ -35,34 +35,7 @@ provider:
     REGIONAL_IPSET_DYNAMIC: ${ env:REGIONAL_IPSET_DYNAMIC }
     REGIONAL_IPSET_FIXED: ${ env:REGIONAL_IPSET_FIXED }
   iam:
-    role:
-      name: pepe-${self:provider.stage}-role
-      statements:
-        - Effect: 'Allow'
-          Action:
-            - 'ec2:RevokeSecurityGroupIngress'
-            - 'ec2:AuthorizeSecurityGroupIngress'
-          Resource:
-            - 'arn:aws:ec2:us-east-1:${ env:AWS_ACCOUNT }:security-group/${ env:DEV_SGID }'
-            - 'arn:aws:ec2:us-east-1:${ env:AWS_ACCOUNT }:security-group/${ env:QA_SGID }'
-            - 'arn:aws:ec2:us-east-1:${ env:AWS_ACCOUNT }:security-group/${ env:PROD_SGID }'
-            - 'arn:aws:ec2:us-east-1:${ env:AWS_ACCOUNT }:security-group/${ env:TOOLS_SGID }'
-        - Effect: 'Allow'
-          Action:
-            - 'ec2:DescribeSecurityGroups'
-          Resource:
-            - '*'
-        - Effect: 'Allow'
-          Action:
-            - 'waf:UpdateIPSet'
-            - 'waf:GetIPSet'
-            - 'waf-regional:UpdateIPSet'
-            - 'waf-regional:GetIPSet'
-          Resource:
-            - 'arn:aws:waf-regional:us-east-1:${ env:AWS_ACCOUNT }:ipset/${ env:REGIONAL_IPSET_DYNAMIC }'
-            - 'arn:aws:waf-regional:us-east-1:${ env:AWS_ACCOUNT }:ipset/${ env:REGIONAL_IPSET_FIXED }'
-            - 'arn:aws:waf::${ env:AWS_ACCOUNT }:ipset/${ env:GLOBAL_IPSET_DYNAMIC }'
-            - 'arn:aws:waf::${ env:AWS_ACCOUNT }:ipset/${ env:GLOBAL_IPSET_FIXED }'
+    role: arn:aws:iam::${ env:AWS_ACCOUNT }:role/role-lambda-pepe
   stackTags:
     environment: tools
     duration: indeterminate
@@ -73,24 +46,24 @@ provider:
 functions:
   pepe:
     handler: src/app.handler
-    name: ${self:provider.stage}-pepe-bot
+    name: ${opt:stage, 'dev'}-pepe-bot
     events:
       - http:
           method: POST
           path: googlechat
       - schedule:
-        name: clear-waf-dynamic-ips
-        description: Clear  all waf dynamic ips
-        rate: cron(0 9 ? */2 MON *)
-        input:
-          resource: cloudwatch events
-          user:
-            displayName: DevOps
-            email: devops@boomcredit.net
-          message:
-            argumentText: clean
-            annotations:
-              - slashCommand:
-                commandName: '/iprelease'
-            slashCommand:
-              commandId: 1
+          name: ${opt:stage, 'dev'}-clear-waf-dynamic-ips
+          description: Clear all waf dynamic ips
+          rate: cron(0 9 1,15 * ? *)
+          input:
+            resource: 'cloudwatch events'
+            user:
+              displayName: 'DevOps'
+              email: 'devops@boomcredit.net'
+            message:
+              argumentText: 'clean'
+              annotations:
+                - slashCommand:
+                    commandName: '/iprelease'
+              slashCommand:
+                commandId: '1'

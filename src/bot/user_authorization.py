@@ -10,5 +10,5 @@ def user_authorization(user_name, user_email, type):
         if user_name == user['name'] and user_email == user['email']:
             LOGGER.info(f'Authorized {type} user: {json.dumps({"name": user_name, "email": user_email})}')
             return True
-    LOGGER.error(f'Unauthorized {type} user: {json.dumps({"name": user_name, "email": user_email})}')
+    LOGGER.info(f'Unauthorized {type} user: {json.dumps({"name": user_name, "email": user_email})}')
     return False
