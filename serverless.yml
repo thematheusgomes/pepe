@@ -88,9 +88,9 @@ functions:
               displayName: 'DevOps'
               email: 'devops@boomcredit.net'
             message:
-              argumentText: clean
+              argumentText: 'clean'
               annotations:
                 - slashCommand:
                     commandName: '/iprelease'
               slashCommand:
-                commandId: 1
+                commandId: '1'
