@@ -35,7 +35,7 @@ provider:
     REGIONAL_IPSET_DYNAMIC: ${ env:REGIONAL_IPSET_DYNAMIC }
     REGIONAL_IPSET_FIXED: ${ env:REGIONAL_IPSET_FIXED }
   iam:
-    role: 'arn:aws:iam::${ env:AWS_ACCOUNT }:role/role-lambda-pepe'
+    role: arn:aws:iam::${ env:AWS_ACCOUNT }:role/role-lambda-pepe
   stackTags:
     environment: tools
     duration: indeterminate
