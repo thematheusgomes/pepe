@@ -54,13 +54,17 @@ provider:
             - '*'
         - Effect: 'Allow'
           Action:
+            - 'waf:GetChangeToken'
             - 'waf:UpdateIPSet'
             - 'waf:GetIPSet'
+            - 'waf-regional:GetChangeToken'
             - 'waf-regional:UpdateIPSet'
             - 'waf-regional:GetIPSet'
           Resource:
+            - 'arn:aws:waf-regional:us-east-1:${ env:AWS_ACCOUNT }:changetoken/*'
             - 'arn:aws:waf-regional:us-east-1:${ env:AWS_ACCOUNT }:ipset/${ env:REGIONAL_IPSET_DYNAMIC }'
             - 'arn:aws:waf-regional:us-east-1:${ env:AWS_ACCOUNT }:ipset/${ env:REGIONAL_IPSET_FIXED }'
+            - 'arn:aws:waf::${ env:AWS_ACCOUNT }:changetoken/*'
             - 'arn:aws:waf::${ env:AWS_ACCOUNT }:ipset/${ env:GLOBAL_IPSET_DYNAMIC }'
             - 'arn:aws:waf::${ env:AWS_ACCOUNT }:ipset/${ env:GLOBAL_IPSET_FIXED }'
   stackTags:
