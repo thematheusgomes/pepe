@@ -6,6 +6,8 @@ from src.log import Logger
 LOGGER = Logger()
 
 def select_command(event, user_name, user_email):
+    if 'argumentText' not in event['message']:
+        return f'You have not passed any arguments, please try to run one of the options below:\n\n-> `/sgipupdate help` (Shows a message similar to that with all accepted arguments for this command)\n-> `/iprelease <publicIp>` (Add your ip to the dynamic ips list)\n-> `/iprelease dynamic <publicIp>` (Another option that add your ip to the dynamic ips list)\n-> `/iprelease fixed <publicIp>` (Add your ip to the fixed ips list)\n-> `/iprelease clean` (Remove all ips from dynamic ips list)\n\nTo find out what is your public ip access the link http://checkip.amazonaws.com'
     args = event['message']['argumentText'].split(' ')
     commandId = event['message']['slashCommand']['commandId']
     commandName = event['message']['annotations'][0]['slashCommand']['commandName']
