@@ -51,3 +51,8 @@ function py-destroy() {
     npm install
     serverless remove --stage dev
 }
+
+function py-prod-deploy() {
+    npm install
+    serverless deploy --stage prod
+}
