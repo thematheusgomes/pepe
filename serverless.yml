@@ -6,9 +6,9 @@ plugins:
   - serverless-plugin-resource-tagging
 
 package:
-  exclude:
-    - ./**
-    - '!src/**'
+  patterns:
+    - '!./**'
+    - 'src/**'
 
 custom:
   pythonRequirements:
@@ -36,7 +36,7 @@ provider:
     REGIONAL_IPSET_FIXED: ${ env:REGIONAL_IPSET_FIXED }
   iam:
     role:
-      name: pepe-${self:provider.stage}-role
+      name: pepe-${opt:stage}-role
       statements:
         - Effect: 'Allow'
           Action:
