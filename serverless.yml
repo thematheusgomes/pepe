@@ -36,7 +36,7 @@ provider:
     REGIONAL_IPSET_FIXED: ${ env:REGIONAL_IPSET_FIXED }
   iam:
     role:
-      name: pepe-${opt:stage}-role
+      name: pepe-${self:provider.stage}-role
       statements:
         - Effect: 'Allow'
           Action:
@@ -73,7 +73,7 @@ provider:
 functions:
   pepe:
     handler: src/app.handler
-    name: pepe-${opt:stage}-bot
+    name: ${opt:stage, 'dev'}-pepe-bot
     events:
       - http:
           method: POST
