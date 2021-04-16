@@ -4,6 +4,8 @@
   "description": "### Clone Repository",
   "main": "index.js",
   "scripts": {
+    "secrets:download": "aws s3 cp s3://boomcredit-devops/pepe/secrets.yml ./secrets.yml --region us-east-1",
+    "secrets:upload": "aws s3 cp ./secrets.yml s3://boomcredit-devops/pepe/secrets.yml --region us-east-1",
     "deploy:dev": "npm install; serverless deploy --stage dev --verbose",
     "destroy:dev": "npm install; serverless remove --stage dev",
     "deploy:prod": "npm install; serverless deploy --stage prod --verbose",
