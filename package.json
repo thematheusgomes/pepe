@@ -4,16 +4,19 @@
   "description": "### Clone Repository",
   "main": "index.js",
   "scripts": {
-    "deploy:dev": "npm install; serverless deploy --stage dev",
-    "deploy:prod": "npm install; serverless deploy --stage prod",
+    "secrets:download": "aws s3 cp s3://boomcredit-devops/pepe/secrets.yml ./secrets.yml --region us-east-1",
+    "secrets:upload": "aws s3 cp ./secrets.yml s3://boomcredit-devops/pepe/secrets.yml --region us-east-1",
+    "deploy:dev": "npm install; serverless deploy --stage dev --verbose",
+    "destroy:dev": "npm install; serverless remove --stage dev",
+    "deploy:prod": "npm install; serverless deploy --stage prod --verbose",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serverless": "^2.19.0",
-    "serverless-plugin-resource-tagging": "^1.0.11",
-    "serverless-python-requirements": "^5.1.0"
+    "serverless": "^2.35.0",
+    "serverless-plugin-resource-tagging": "^1.1.0",
+    "serverless-python-requirements": "^5.1.1"
   },
   "devDependencies": {
     "serverless-offline": "^6.8.0"

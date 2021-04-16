@@ -6,39 +6,28 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      AWS_ACCOUNT: ${{ secrets.AWS_ACCOUNT }}
-      PEPE_WEBHOOK: ${{ secrets.PEPE_WEBHOOK }}
-      AUDIENCE: ${{ secrets.PROD_AUDIENCE }}
-      USER_PERMISSIONS: ${{ secrets.USER_PERMISSIONS }}
-      DEV_SGID: ${{ secrets.DEV_SGID }}
-      QA_SGID: ${{ secrets.QA_SGID }}
-      PROD_SGID: ${{ secrets.PROD_SGID }}
-      TOOLS_SGID: ${{ secrets.TOOLS_SGID }}
-      GLOBAL_IPSET_DYNAMIC: ${{ secrets.GLOBAL_IPSET_DYNAMIC }}
-      GLOBAL_IPSET_FIXED: ${{ secrets.GLOBAL_IPSET_FIXED }}
-      REGIONAL_IPSET_DYNAMIC: ${{ secrets.REGIONAL_IPSET_DYNAMIC }}
-      REGIONAL_IPSET_FIXED: ${{ secrets.REGIONAL_IPSET_FIXED }}
+      S3_URI: s3://boomcredit-devops/pepe/secrets.yml
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Node 14
+      - name: Set up Node 12
         uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: '12.x'
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
           python-version: '3.8.x'
-      - name: Install Serverless Framework
-        run: npm install
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+      - name: Download secrets.yml from S3
+        run: aws s3 cp $S3_URI ./secrets.yml --region us-east-1
       - name: Deploy
-        run: npx serverless deploy --stage prod
+        run: npm run deploy:prod
       - name: Google Chat Notification
         uses: Co-qn/google-chat-notification@releases/v1
         if: always()
