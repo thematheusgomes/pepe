@@ -6,7 +6,7 @@
   "scripts": {
     "deploy:dev": "npm install; serverless deploy --stage dev --verbose",
     "destroy:dev": "npm install; serverless remove --stage dev",
-    "deploy:prod": "npm install; serverless deploy --stage dev --verbose",
+    "deploy:prod": "npm install; serverless deploy --stage prod --verbose",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
