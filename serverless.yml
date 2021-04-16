@@ -13,8 +13,7 @@ package:
 custom:
   pythonRequirements:
     dockerizePip: non-linux
-
-useDotenv: true
+  secrets: ${file(secrets.yml)}
 
 provider:
   name: aws
@@ -23,19 +22,50 @@ provider:
   memorySize: 128
   timeout: 15
   environment:
-    PEPE_WEBHOOK: ${ env:PEPE_WEBHOOK }
-    AUDIENCE: ${ env:AUDIENCE }
-    USER_PERMISSIONS: ${ env:USER_PERMISSIONS }
-    DEV_SGID: ${ env:DEV_SGID }
-    QA_SGID: ${ env:QA_SGID }
-    PROD_SGID: ${ env:PROD_SGID }
-    TOOLS_SGID: ${ env:TOOLS_SGID }
-    GLOBAL_IPSET_DYNAMIC: ${ env:GLOBAL_IPSET_DYNAMIC }
-    GLOBAL_IPSET_FIXED: ${ env:GLOBAL_IPSET_FIXED }
-    REGIONAL_IPSET_DYNAMIC: ${ env:REGIONAL_IPSET_DYNAMIC }
-    REGIONAL_IPSET_FIXED: ${ env:REGIONAL_IPSET_FIXED }
+    AUDIENCE: ${self:custom.secrets.AUDIENCE}
+    PEPE_WEBHOOK: ${self:custom.secrets.PEPE_WEBHOOK}
+    USER_PERMISSIONS: ${self:custom.secrets.USER_PERMISSIONS}
+    DEV_SGID: ${self:custom.secrets.DEV_SGID}
+    QA_SGID: ${self:custom.secrets.QA_SGID}
+    PROD_SGID: ${self:custom.secrets.PROD_SGID}
+    TOOLS_SGID: ${self:custom.secrets.TOOLS_SGID}
+    GLOBAL_IPSET_DYNAMIC: ${self:custom.secrets.GLOBAL_IPSET_DYNAMIC}
+    GLOBAL_IPSET_FIXED: ${self:custom.secrets.GLOBAL_IPSET_FIXED}
+    REGIONAL_IPSET_DYNAMIC: ${self:custom.secrets.REGIONAL_IPSET_DYNAMIC}
+    REGIONAL_IPSET_FIXED: ${self:custom.secrets.REGIONAL_IPSET_FIXED}
   iam:
-    role: arn:aws:iam::${ env:AWS_ACCOUNT }:role/role-lambda-pepe
+    role:
+      name: ${opt:stage,'dev'}-pepe-bot
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 'ec2:RevokeSecurityGroupIngress'
+            - 'ec2:AuthorizeSecurityGroupIngress'
+          Resource:
+            - 'arn:aws:ec2:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:security-group/${self:custom.secrets.DEV_SGID}'
+            - 'arn:aws:ec2:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:security-group/${self:custom.secrets.QA_SGID}'
+            - 'arn:aws:ec2:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:security-group/${self:custom.secrets.PROD_SGID}'
+            - 'arn:aws:ec2:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:security-group/${self:custom.secrets.TOOLS_SGID}'
+        - Effect: 'Allow'
+          Action:
+            - 'ec2:DescribeSecurityGroups'
+          Resource:
+            - '*'
+        - Effect: 'Allow'
+          Action:
+            - 'waf:GetChangeToken'
+            - 'waf:UpdateIPSet'
+            - 'waf:GetIPSet'
+            - 'waf-regional:GetChangeToken'
+            - 'waf-regional:UpdateIPSet'
+            - 'waf-regional:GetIPSet'
+          Resource:
+            - 'arn:aws:waf::${self:custom.secrets.AWS_ACCOUNT}:changetoken/*'
+            - 'arn:aws:waf::${self:custom.secrets.AWS_ACCOUNT}:ipset/${self:custom.secrets.GLOBAL_IPSET_DYNAMIC}'
+            - 'arn:aws:waf::${self:custom.secrets.AWS_ACCOUNT}:ipset/${self:custom.secrets.GLOBAL_IPSET_FIXED}'
+            - 'arn:aws:waf-regional:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:changetoken/*'
+            - 'arn:aws:waf-regional:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:ipset/${self:custom.secrets.REGIONAL_IPSET_DYNAMIC}'
+            - 'arn:aws:waf-regional:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:ipset/${self:custom.secrets.REGIONAL_IPSET_FIXED}'
   stackTags:
     environment: tools
     duration: indeterminate
@@ -46,13 +76,13 @@ provider:
 functions:
   pepe:
     handler: src/app.handler
-    name: ${opt:stage, 'dev'}-pepe-bot
+    name: ${opt:stage,'dev'}-pepe-bot
     events:
       - http:
           method: POST
           path: googlechat
       - schedule:
-          name: ${opt:stage, 'dev'}-clear-waf-dynamic-ips
+          name: ${opt:stage,'dev'}-clear-waf-dynamic-ips
           description: Clear all waf dynamic ips
           rate: cron(0 9 1,15 * ? *)
           input:
