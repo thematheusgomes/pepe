@@ -6,7 +6,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      S3_URI: s3://boomcredit-devops/pepe/secrets.json
+      S3_URI: s3://boomcredit-devops/pepe/secrets.yml
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -24,6 +24,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+      - name: Download secrets.yml from S3
+        run: aws s3 cp $S3_URI ./secrets.yml --region us-east-1
       - name: Deploy
         run: npm run deploy:prod
       - name: Google Chat Notification
