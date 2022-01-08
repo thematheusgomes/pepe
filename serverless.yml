@@ -1,4 +1,4 @@
-service: pepe
+service: ${opt:stage,'dev'}-chat-bot
 
 plugins:
   - serverless-offline
@@ -13,26 +13,19 @@ package:
 custom:
   pythonRequirements:
     dockerizePip: non-linux
-  secrets: ${file(secrets.yml)}
+
+useDotenv: true
+variablesResolutionMode: 20210326
 
 provider:
   name: aws
-  runtime: python3.8
   region: us-east-1
-  memorySize: 128
-  timeout: 15
-  environment:
-    AUDIENCE: ${self:custom.secrets.AUDIENCE}
-    PEPE_WEBHOOK: ${self:custom.secrets.PEPE_WEBHOOK}
-    USER_PERMISSIONS: ${self:custom.secrets.USER_PERMISSIONS}
-    DEV_SGID: ${self:custom.secrets.DEV_SGID}
-    QA_SGID: ${self:custom.secrets.QA_SGID}
-    PROD_SGID: ${self:custom.secrets.PROD_SGID}
-    TOOLS_SGID: ${self:custom.secrets.TOOLS_SGID}
-    GLOBAL_IPSET_DYNAMIC: ${self:custom.secrets.GLOBAL_IPSET_DYNAMIC}
-    GLOBAL_IPSET_FIXED: ${self:custom.secrets.GLOBAL_IPSET_FIXED}
-    REGIONAL_IPSET_DYNAMIC: ${self:custom.secrets.REGIONAL_IPSET_DYNAMIC}
-    REGIONAL_IPSET_FIXED: ${self:custom.secrets.REGIONAL_IPSET_FIXED}
+  stackName: ${opt:stage,'dev'}-pepe-bot
+  stackTags:
+    Environment: ${opt:stage,'dev'}
+  apiGateway:
+    shouldStartNameWithService: true
+  lambdaHashingVersion: 20201221
   iam:
     role:
       name: ${opt:stage,'dev'}-pepe-bot
@@ -42,10 +35,10 @@ provider:
             - 'ec2:RevokeSecurityGroupIngress'
             - 'ec2:AuthorizeSecurityGroupIngress'
           Resource:
-            - 'arn:aws:ec2:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:security-group/${self:custom.secrets.DEV_SGID}'
-            - 'arn:aws:ec2:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:security-group/${self:custom.secrets.QA_SGID}'
-            - 'arn:aws:ec2:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:security-group/${self:custom.secrets.PROD_SGID}'
-            - 'arn:aws:ec2:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:security-group/${self:custom.secrets.TOOLS_SGID}'
+            - 'arn:aws:ec2:us-east-1:212568053769:security-group/${ssm:/dev/aws/ec2/bastion/security_group_id, env:DEV_SGID}'
+            - 'arn:aws:ec2:us-east-1:212568053769:security-group/${ssm:/qa/aws/ec2/bastion/security_group_id, env:QA_SGID}'
+            - 'arn:aws:ec2:us-east-1:212568053769:security-group/${ssm:/prod/aws/ec2/bastion/security_group_id, env:PROD_SGID}'
+            - 'arn:aws:ec2:us-east-1:212568053769:security-group/${ssm:/tools/aws/ec2/bastion/security_group_id, env:TOOLS_SGID}'
         - Effect: 'Allow'
           Action:
             - 'ec2:DescribeSecurityGroups'
@@ -60,30 +53,45 @@ provider:
             - 'waf-regional:UpdateIPSet'
             - 'waf-regional:GetIPSet'
           Resource:
-            - 'arn:aws:waf::${self:custom.secrets.AWS_ACCOUNT}:changetoken/*'
-            - 'arn:aws:waf::${self:custom.secrets.AWS_ACCOUNT}:ipset/${self:custom.secrets.GLOBAL_IPSET_DYNAMIC}'
-            - 'arn:aws:waf::${self:custom.secrets.AWS_ACCOUNT}:ipset/${self:custom.secrets.GLOBAL_IPSET_FIXED}'
-            - 'arn:aws:waf-regional:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:changetoken/*'
-            - 'arn:aws:waf-regional:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:ipset/${self:custom.secrets.REGIONAL_IPSET_DYNAMIC}'
-            - 'arn:aws:waf-regional:us-east-1:${self:custom.secrets.AWS_ACCOUNT}:ipset/${self:custom.secrets.REGIONAL_IPSET_FIXED}'
-  stackTags:
-    environment: tools
-    duration: indeterminate
-  apiGateway:
-    shouldStartNameWithService: true
-  lambdaHashingVersion: 20201221
+            - 'arn:aws:waf::212568053769:changetoken/*'
+            - 'arn:aws:waf::212568053769:ipset/${ssm:/all/aws/waf/ipset/global_dynamic_ips, env:GLOBAL_IPSET_DYNAMIC}'
+            - 'arn:aws:waf::212568053769:ipset/${ssm:/all/aws/waf/ipset/global_fixed_ips, env:GLOBAL_IPSET_FIXED}'
+            - 'arn:aws:waf-regional:us-east-1:212568053769:changetoken/*'
+            - 'arn:aws:waf-regional:us-east-1:212568053769:ipset/${ssm:/all/aws/waf/ipset/regional_dynamic_ips, env:REGIONAL_IPSET_DYNAMIC}'
+            - 'arn:aws:waf-regional:us-east-1:212568053769:ipset/${ssm:/all/aws/waf/ipset/regional_fixed_ips, env:REGIONAL_IPSET_FIXED}'
+        - Effect: 'Allow'
+          Action:
+            - 'lambda:InvokeFunction'
+          Resource:
+            - 'arn:aws:lambda:us-east-1:212568053769:function:tools-turn-on-off'
 
 functions:
   pepe:
     handler: src/app.handler
     name: ${opt:stage,'dev'}-pepe-bot
+    description: Bot that assists interactions with AWS resources
+    runtime: python3.9
+    memorySize: 128
+    timeout: 30
+    environment:
+      AUDIENCE: ${ssm:/tools/chatbot/lambda/pepe/google_audience, env:AUDIENCE}
+      PEPE_WEBHOOK: ${ssm:/tools/chatbot/lambda/pepe/webhook, env:PEPE_WEBHOOK}
+      USER_PERMISSIONS: ${ssm:/tools/chatbot/lambda/pepe/user_permissions, env:USER_PERMISSIONS}
+      DEV_SGID: ${ssm:/dev/aws/ec2/bastion/security_group_id, env:DEV_SGID}
+      QA_SGID: ${ssm:/qa/aws/ec2/bastion/security_group_id, env:QA_SGID}
+      PROD_SGID: ${ssm:/prod/aws/ec2/bastion/security_group_id, env:PROD_SGID}
+      TOOLS_SGID: ${ssm:/tools/aws/ec2/bastion/security_group_id, env:TOOLS_SGID}
+      GLOBAL_IPSET_DYNAMIC: ${ssm:/all/aws/waf/ipset/global_dynamic_ips, env:GLOBAL_IPSET_DYNAMIC}
+      GLOBAL_IPSET_FIXED: ${ssm:/all/aws/waf/ipset/global_fixed_ips, env:GLOBAL_IPSET_FIXED}
+      REGIONAL_IPSET_DYNAMIC: ${ssm:/all/aws/waf/ipset/regional_dynamic_ips, env:REGIONAL_IPSET_DYNAMIC}
+      REGIONAL_IPSET_FIXED: ${ssm:/all/aws/waf/ipset/regional_fixed_ips, env:REGIONAL_IPSET_FIXED}
     events:
       - http:
           method: POST
           path: googlechat
       - schedule:
-          name: ${opt:stage,'dev'}-clear-waf-dynamic-ips
-          description: Clear all waf dynamic ips
+          name: ${opt:stage,'dev'}-clear-dynamic-ipset
+          description: Remove all dynamic ips from Waf ipset
           rate: cron(0 9 1,15 * ? *)
           input:
             resource: 'cloudwatch events'

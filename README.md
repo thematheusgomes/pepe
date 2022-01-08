@@ -1,6 +1,6 @@
 # Set up
 
-### Clone Repository
+##### Clone Repository
 
 ```
 git clone git@github.com:Boomcredit/pepe.git
@@ -8,32 +8,85 @@ git clone git@github.com:Boomcredit/pepe.git
 
 ### Environment
 
+Requirements:
+
+Install the packages below:
+- python3.9
+- node 14
+- yarn
+- pipenv
+
 Refresh aws tokens using [aws-google-auth](https://github.com/Boomcredit/boomcredit-devops/wiki/Sign-in-to-AWS-using-GSuite-credentials)
 
-Get a set of ready to use functions (bash):
-```bash
-cd pepe/
-source scripts.sh
-py-env
+Install serverless packages:
 ```
+yarn install
+```
+
+Start a virtualenv:
+```
+pipenv shell
+```
+
+Install all python dependencies:
+```
+pipenv install
+```
+An alternative is to use the functions from the `/tools/scripts.sh` file:
+```bash
+source /tools/scripts.sh
+```
+
+### Run locally
+
+You can run Pepe locally using the `serverless-offline` and `ngrok` packages.
+
+After installing all prerequisites run the command:
+```
+serverless offline
+```
+
+In addition you can create an HTTPS endpoint using ngrok:
+```
+ngrok http 3000
+```
+
+To configure this endpoint in the development bot, go to the google cloud, select the `Superset` project, then look for the Google Chat service, and click manage, there you will have the option to set the endpoint where the bot should forward the message.
 
 ### Deployment
 
-After you install all python required modules, run:
+After installing the serverless packages and all python dependencies, you can deploy the environment for dev by running the command:
 ```
-npm run deploy:dev
+yarn deploy:dev
 ```
+
+To deploy to the tools environment, run the command:
+```
+yarn deploy:tools
+```
+
+To deploy just the function without changing the infrastructure, run the command:
+```
+yarn deploy:function:tools
+```
+
+If you want to consult the scripts, take a look at the `package.json` file.
 
 # Available Commands
 
-- `/iprelease`
-    - `/iprelease <publicIp>` (Add your ip to the dynamic ips list)
-    - `/iprelease dynamic <publicIp>` (Another option that add your ip to the dynamic ips list)
-    - `/iprelease fixed <publicIp>` (Add your ip to the fixed ips list)
-    - `/iprelease clean` (Remove all ips from dynamic ips list)
+`/iprelease <publicIp>`
+`/iprelease <action> <publicIp>`
 
-- `/sgipupdate`
-    - `/sgipupdate dev <publicIp>` (Update IP in the Dev Security Group)
-    - `/sgipupdate qa <publicIp>` (Update IP in the Qa Security Group)
-    - `/sgipupdate prod <publicIp>` (Update IP in the Prod Security Group)
-    - `/sgipupdate tools <publicIp>` (Update IP in the Tools Security Group)
+**supported action:** [dynamic, fixed, clean] (clean remove all dynamic ips)
+**supported publicIp:** [IPv4, IPv6]
+
+`/sgipupdate <environment> <publicIp>`
+
+**supported environments:** [dev, qa, tools, prod]
+**supported publicIp:** [IPv4, IPv6]
+
+`/turnonoff <action> <environment> <target>`
+
+**supported actions:** [start, stop]
+**supported environments:** [dev, qa, tools] (tools is only supported for target bastion)
+**supported targets:** [bastion, clusters]
