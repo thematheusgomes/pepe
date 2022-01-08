@@ -1,7 +1,6 @@
 # Distribution / packaging
 .Python
 .env
-build/
 develop-eggs/
 dist/
 downloads/
@@ -17,20 +16,17 @@ var/
 *.egg
 __pycache__
 
-# Environment files
-.env
-.env.dev
-.env.prod
-secrets.yml
-
 # Serverless directories
 .serverless
 
-# Others
+# Python Virtualenv
 .venv/
-.vscode/
+
+# Node
 node_modules
-package-lock.json
 
 # Artifact
 *.zip
+
+# Others
+.vscode/

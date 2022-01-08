@@ -1,12 +1,12 @@
 import os
 from json import dumps
 from httplib2 import Http
-from src.log import Logger
+from src.logger import Logger
 
-LOGGER = Logger()
+logger = Logger()
 WEBHOOK = os.getenv('PEPE_WEBHOOK')
 
-def send_message_to_rooms(message):
+def send_message_to_space(message):
     http_obj = Http()
     message_headers = {'Content-Type': 'application/json; charset=UTF-8'}
     try:
@@ -16,7 +16,7 @@ def send_message_to_rooms(message):
             headers=message_headers,
             body=dumps({'text': message})
         )
-        LOGGER.info('Message sent successfully')
-        LOGGER.info(f'Response: {response}')
+        logger.info('Message sent successfully')
+        logger.info(f'Response: {response}')
     except Exception as e:
-        LOGGER.error(e)
+        logger.error(e)

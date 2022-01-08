@@ -1,0 +1,64 @@
+{
+    "type": "MESSAGE",
+    "eventTime": "2021-01-11T16:02:25.767759Z",
+    "message": {
+        "name": "spaces/<space_id>/messages/<thread_id>.<thread_id>",
+        "sender": {
+            "name": "users/<user_id>",
+            "displayName": "User Name",
+            "avatarUrl": "https://lh3.googleusercontent.com/a-/<image_hash>",
+            "email": "user.email@gmail.com",
+            "type": "HUMAN",
+            "domainId": "<domain_id>"
+        },
+        "createTime": "2021-01-11T16:02:25.767759Z",
+        "text": "/slashcommand something",
+        "annotations": [
+            {
+                "type": "SLASH_COMMAND",
+                "startIndex": 0,
+                "length": 12,
+                "slashCommand": {
+                    "bot": {
+                        "name": "users/<user_id>",
+                        "displayName": "Pepe",
+                        "avatarUrl": "https://lh5.googleusercontent.com/proxy/<image_hash>",
+                        "type": "BOT"
+                    },
+                    "type": "INVOKE",
+                    "commandName": "/slashcommand",
+                    "commandId": "1"
+                }
+            }
+        ],
+        "thread": {
+            "name": "spaces/<space_id>/threads/<thread_id>",
+            "retentionSettings": {
+                "state": "PERMANENT"
+            }
+        },
+        "space": {
+            "name": "spaces/<space_id>",
+            "type": "DM",
+            "singleUserBotDm": true
+        },
+        "argumentText": " something",
+        "slashCommand": {
+            "commandId": "1"
+        }
+    },
+    "user": {
+        "name": "users/<user_id>",
+        "displayName": "User Name",
+        "avatarUrl": "https://lh3.googleusercontent.com/a-/<image_hash>",
+        "email": "user.email@gmail.com",
+        "type": "HUMAN",
+        "domainId": "<domain_id>"
+    },
+    "space": {
+        "name": "spaces/<space_id>",
+        "type": "DM",
+        "singleUserBotDm": true
+    },
+    "configCompleteRedirectUrl": "https://chat.google.com/api/bot_config_complete?token=<token_id>"
+}

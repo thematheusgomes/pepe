@@ -4,22 +4,20 @@
   "description": "### Clone Repository",
   "main": "index.js",
   "scripts": {
-    "secrets:download": "aws s3 cp s3://boomcredit-devops/pepe/secrets.yml ./secrets.yml --region us-east-1",
-    "secrets:upload": "aws s3 cp ./secrets.yml s3://boomcredit-devops/pepe/secrets.yml --region us-east-1",
-    "deploy:dev": "npm install; serverless deploy --stage dev --verbose",
-    "destroy:dev": "npm install; serverless remove --stage dev",
-    "deploy:prod": "npm install; serverless deploy --stage prod --verbose",
+    "remove:dev": "yarn install; serverless remove --stage dev",
+    "deploy:dev": "yarn install; serverless deploy --stage dev --verbose",
+    "deploy:tools": "yarn install; serverless deploy --stage tools --verbose",
+    "deploy:function:dev": "yarn install; serverless deploy function -f pepe --stage dev",
+    "deploy:function:tools": "yarn install; serverless deploy function -f pepe --stage tools",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "serverless": "^2.35.0",
-    "serverless-plugin-resource-tagging": "^1.1.0",
-    "serverless-python-requirements": "^5.1.1"
-  },
   "devDependencies": {
-    "serverless-offline": "^6.8.0"
+    "serverless": "^2.62.0",
+    "serverless-offline": "^8.2.0",
+    "serverless-plugin-resource-tagging": "^1.1.1",
+    "serverless-python-requirements": "^5.1.1"
   },
   "repository": {
     "type": "git",

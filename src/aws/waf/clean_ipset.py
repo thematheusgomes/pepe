@@ -1,8 +1,8 @@
 import boto3
-from src.log import Logger
-import src.aws_services.waf.update_ipset as waf
+from src.logger import Logger
+import src.aws.waf.update_ipset as waf
 
-LOGGER = Logger()
+logger = Logger()
 
 def clean_ipset(global_ipset, regional_ipset, user_name):
     global_ips = get_global_ipset(global_ipset, publicIps = [])
@@ -11,7 +11,8 @@ def clean_ipset(global_ipset, regional_ipset, user_name):
     regional_params = waf.constructor(regional_ips, action = 'DELETE')
     waf.update_ip_on_global_ipset(global_ipset, user_name, global_params, action = 'DELETE')
     waf.update_ip_on_regional_ipset(regional_ipset, user_name, regional_params, action = 'DELETE')
-    return global_ips, regional_ips
+    logger.info(f'IPs removed from the Global list: {global_ips}')
+    logger.info(f'IPs removed from the Regional list: {regional_ips}')
 
 def get_global_ipset(global_ipset, publicIps):
     try:
@@ -19,10 +20,10 @@ def get_global_ipset(global_ipset, publicIps):
         response = global_client.get_ip_set(IPSetId=global_ipset)
         for ip in response['IPSet']['IPSetDescriptors']:
             publicIps.append(ip_version(ip['Value']))
-        LOGGER.info('Global ips list was successfully generated')
+        logger.info('Global ips list was successfully generated')
         return publicIps
     except Exception as e:
-        LOGGER.error(e)
+        logger.error(e)
 
 def get_regional_ipset(global_ipset, publicIps):
     try:
@@ -30,10 +31,10 @@ def get_regional_ipset(global_ipset, publicIps):
         response = regional_client.get_ip_set(IPSetId=global_ipset)
         for ip in response['IPSet']['IPSetDescriptors']:
             publicIps.append(ip_version(ip['Value']))
-        LOGGER.info('Regional ips list was successfully generated')
+        logger.info('Regional ips list was successfully generated')
         return publicIps
     except Exception as e:
-        LOGGER.error(e)
+        logger.error(e)
 
 def ip_version(ip):
     try:
@@ -42,4 +43,4 @@ def ip_version(ip):
         elif '/128' in ip:
             return {'IpAddress': ip, 'Version': 'IPV6'}
     except Exception as e:
-        LOGGER.error(e)
+        logger.error(e)

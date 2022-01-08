@@ -1,7 +1,7 @@
-name: '[PROD] Pipeline'
+name: '[DEV] Pipeline'
 on:
   push:
-    tags: ['v[1-2][0-9].[0-1][0-9].[0-3][0-9]*']
+    branches: [main]
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -11,11 +11,11 @@ jobs:
       - name: Set up Node 14
         uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: 14
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9.x'
+          python-version: 3.9
       - name: Set up Pipenv
         run: pip install pipenv
       - name: Configure AWS Credentials
@@ -25,11 +25,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy
-        run: yarn deploy:function:tools
+        run: yarn deploy:function:dev
       - name: Google Chat Notification
         uses: Co-qn/google-chat-notification@releases/v1
         if: always()
         with:
-          name: '[PROD] Deploy'
+          name: '[DEV] Deploy'
           url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
           status: ${{ job.status }}
