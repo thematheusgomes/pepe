@@ -3,7 +3,7 @@
 ##### Clone Repository
 
 ```
-git clone git@github.com:Boomcredit/pepe.git
+git clone git@github.com:thematheusgomes/pepe.git
 ```
 
 ### Environment
