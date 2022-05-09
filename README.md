@@ -16,7 +16,7 @@ Install the packages below:
 - yarn
 - pipenv
 
-Refresh aws tokens using [aws-google-auth](https://github.com/Boomcredit/boomcredit-devops/wiki/Sign-in-to-AWS-using-GSuite-credentials)
+Refresh aws tokens using aws-google-auth package.
 
 Install serverless packages:
 ```

@@ -2,7 +2,7 @@
     "resource": "cloudwatch events",
     "user": {
         "displayName": "DevOps",
-        "email": "devops@boomcredit.net"
+        "email": "test@email.com"
     },
     "message": {
         "argumentText": "clean",

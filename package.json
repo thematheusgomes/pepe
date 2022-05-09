@@ -21,10 +21,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Boomcredit/pepe.git"
+    "url": "git+https://github.com/thematheusgomes/pepe.git"
   },
   "bugs": {
-    "url": "https://github.com/Boomcredit/pepe/issues"
+    "url": "https://github.com/thematheusgomes/pepe/issues"
   },
-  "homepage": "https://github.com/Boomcredit/pepe#readme"
+  "homepage": "https://github.com/thematheusgomes/pepe#readme"
 }
