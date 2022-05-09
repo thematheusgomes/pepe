@@ -19,7 +19,7 @@ variablesResolutionMode: 20210326
 
 provider:
   name: aws
-  region: us-east-1
+  region: ${aws:region}
   stackName: ${opt:stage,'dev'}-pepe-bot
   stackTags:
     Environment: ${opt:stage,'dev'}
@@ -35,10 +35,10 @@ provider:
             - 'ec2:RevokeSecurityGroupIngress'
             - 'ec2:AuthorizeSecurityGroupIngress'
           Resource:
-            - 'arn:aws:ec2:us-east-1:212568053769:security-group/${ssm:/dev/aws/ec2/bastion/security_group_id, env:DEV_SGID}'
-            - 'arn:aws:ec2:us-east-1:212568053769:security-group/${ssm:/qa/aws/ec2/bastion/security_group_id, env:QA_SGID}'
-            - 'arn:aws:ec2:us-east-1:212568053769:security-group/${ssm:/prod/aws/ec2/bastion/security_group_id, env:PROD_SGID}'
-            - 'arn:aws:ec2:us-east-1:212568053769:security-group/${ssm:/tools/aws/ec2/bastion/security_group_id, env:TOOLS_SGID}'
+            - 'arn:aws:ec2:${aws:region}:${aws:accountId}:security-group/${ssm:/dev/aws/ec2/bastion/security_group_id, env:DEV_SGID}'
+            - 'arn:aws:ec2:${aws:region}:${aws:accountId}:security-group/${ssm:/qa/aws/ec2/bastion/security_group_id, env:QA_SGID}'
+            - 'arn:aws:ec2:${aws:region}:${aws:accountId}:security-group/${ssm:/prod/aws/ec2/bastion/security_group_id, env:PROD_SGID}'
+            - 'arn:aws:ec2:${aws:region}:${aws:accountId}:security-group/${ssm:/tools/aws/ec2/bastion/security_group_id, env:TOOLS_SGID}'
         - Effect: 'Allow'
           Action:
             - 'ec2:DescribeSecurityGroups'
@@ -53,17 +53,17 @@ provider:
             - 'waf-regional:UpdateIPSet'
             - 'waf-regional:GetIPSet'
           Resource:
-            - 'arn:aws:waf::212568053769:changetoken/*'
-            - 'arn:aws:waf::212568053769:ipset/${ssm:/all/aws/waf/ipset/global_dynamic_ips, env:GLOBAL_IPSET_DYNAMIC}'
-            - 'arn:aws:waf::212568053769:ipset/${ssm:/all/aws/waf/ipset/global_fixed_ips, env:GLOBAL_IPSET_FIXED}'
-            - 'arn:aws:waf-regional:us-east-1:212568053769:changetoken/*'
-            - 'arn:aws:waf-regional:us-east-1:212568053769:ipset/${ssm:/all/aws/waf/ipset/regional_dynamic_ips, env:REGIONAL_IPSET_DYNAMIC}'
-            - 'arn:aws:waf-regional:us-east-1:212568053769:ipset/${ssm:/all/aws/waf/ipset/regional_fixed_ips, env:REGIONAL_IPSET_FIXED}'
+            - 'arn:aws:waf::${aws:accountId}:changetoken/*'
+            - 'arn:aws:waf::${aws:accountId}:ipset/${ssm:/all/aws/waf/ipset/global_dynamic_ips, env:GLOBAL_IPSET_DYNAMIC}'
+            - 'arn:aws:waf::${aws:accountId}:ipset/${ssm:/all/aws/waf/ipset/global_fixed_ips, env:GLOBAL_IPSET_FIXED}'
+            - 'arn:aws:waf-regional:${aws:region}:${aws:accountId}:changetoken/*'
+            - 'arn:aws:waf-regional:${aws:region}:${aws:accountId}:ipset/${ssm:/all/aws/waf/ipset/regional_dynamic_ips, env:REGIONAL_IPSET_DYNAMIC}'
+            - 'arn:aws:waf-regional:${aws:region}:${aws:accountId}:ipset/${ssm:/all/aws/waf/ipset/regional_fixed_ips, env:REGIONAL_IPSET_FIXED}'
         - Effect: 'Allow'
           Action:
             - 'lambda:InvokeFunction'
           Resource:
-            - 'arn:aws:lambda:us-east-1:212568053769:function:tools-turn-on-off'
+            - 'arn:aws:lambda:${aws:region}:${aws:accountId}:function:tools-turn-on-off'
 
 functions:
   pepe:
